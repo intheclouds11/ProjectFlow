@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HurricaneVR.Framework", "Hu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HurricaneVR.Editor", "HurricaneVR.Editor.csproj", "{b7143c02-9b31-ca3d-d405-6459c8c33855}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{1cf0beac-7fe8-68e4-e669-f185d1a1e2c9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +20,8 @@ Global
 		{3af8cd9e-8880-359d-96c0-50ed071f427c}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b7143c02-9b31-ca3d-d405-6459c8c33855}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{b7143c02-9b31-ca3d-d405-6459c8c33855}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1cf0beac-7fe8-68e4-e669-f185d1a1e2c9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1cf0beac-7fe8-68e4-e669-f185d1a1e2c9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

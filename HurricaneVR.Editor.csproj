@@ -45,54 +45,54 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.8f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRHandSetup.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRPhysicsLeverCreatorEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRSocketableEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\DefaultEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRCommentsInspector.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRStabberEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRGunCreator.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRCockingHandleEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRSocketableTagsEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVREditorExtensions.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\CustomContexts.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVREditorPreferences.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRGunBoltEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\EnumFlagDrawer.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRSocketableTagDrawer.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRTriggerAnimatorEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRGunPartEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\LayerMaskDrawer.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\DrawIfPropertyDrawer.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVREditorManager.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRManagementWindow.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRPosableHandEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRButtonEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRSocketableTagDropDown.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRPhysicsDialEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRSetupWindow.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRPhysicsPoserEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\EmbeddedAssetEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRPhysicsDrawerEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRRotationLimiterEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRHandPoserEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\HVRPhysicsButtonEditor.cs" />
-     <Compile Include="Assets\HurricaneVR\Framework\Editor\EmbeddedAssetDrawer.cs" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\HurricaneVR.Editor.asmdef" />
-     <Folder Include="Assets\HurricaneVR\Framework\Editor\Libs" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\Resources\HVRManagementWindow.uss" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\Resources\HVRSetupWindow.uss" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\Resources\HVRHandPoserEditor.uss" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\Resources\HVRHandSettingsEditor.uxml" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\Resources\HVRBlendEditor.uss" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\Resources\HVRBlendEditor.uxml" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\Resources\HVRSetupWindow.uxml" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\Resources\HVRManagementWindow.uxml" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\Resources\HVRHandPoseEditor.uxml" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\Resources\HVRPhysicsPoserEditor.uxml" />
-     <Folder Include="Assets\HurricaneVR\Framework\Editor" />
-     <None Include="Assets\HurricaneVR\Framework\Editor\Resources\HVRHandPoserEditor.uxml" />
-     <Folder Include="Assets\HurricaneVR\Framework\Editor\Resources" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRPhysicsPoserEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRSocketableTagDrawer.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRSetupWindow.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRManagementWindow.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\EmbeddedAssetEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\EnumFlagDrawer.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVREditorManager.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRGunPartEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRGunBoltEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\LayerMaskDrawer.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\DrawIfPropertyDrawer.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRStabberEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRSocketableEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRPhysicsButtonEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\CustomContexts.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRCockingHandleEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRPhysicsLeverCreatorEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\DefaultEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVREditorExtensions.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\EmbeddedAssetDrawer.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRPosableHandEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRSocketableTagsEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRButtonEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVREditorPreferences.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRHandPoserEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRPhysicsDialEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRRotationLimiterEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRGunCreator.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRHandSetup.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRPhysicsDrawerEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRSocketableTagDropDown.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRTriggerAnimatorEditor.cs" />
+     <Compile Include="Assets\Packages\HurricaneVR\Framework\Editor\HVRCommentsInspector.cs" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\HurricaneVR.Editor.asmdef" />
+     <Folder Include="Assets\Packages\HurricaneVR\Framework\Editor\Libs" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources\HVRManagementWindow.uss" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources\HVRSetupWindow.uss" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources\HVRHandPoserEditor.uss" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources\HVRHandSettingsEditor.uxml" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources\HVRBlendEditor.uss" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources\HVRBlendEditor.uxml" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources\HVRSetupWindow.uxml" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources\HVRManagementWindow.uxml" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources\HVRHandPoseEditor.uxml" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources\HVRPhysicsPoserEditor.uxml" />
+     <Folder Include="Assets\Packages\HurricaneVR\Framework\Editor" />
+     <None Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources\HVRHandPoserEditor.uxml" />
+     <Folder Include="Assets\Packages\HurricaneVR\Framework\Editor\Resources" />
      <Reference Include="UnityEngine">
      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.8f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
      </Reference>
@@ -369,9 +369,6 @@
      <Reference Include="Unity.VisualScripting.IonicZip">
      <HintPath>C:\Users\patri\Documents\UnityVR\Project Flow\Library\PackageCache\com.unity.visualscripting@1.9.0\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
      </Reference>
-     <Reference Include="HurricaneVR.Update">
-     <HintPath>C:\Users\patri\Documents\UnityVR\Project Flow\Assets\HurricaneVR\Framework\Editor\Libs\HurricaneVR.Update.dll</HintPath>
-     </Reference>
      <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
      <HintPath>C:\Users\patri\Documents\UnityVR\Project Flow\Library\PackageCache\com.unity.visualscripting@1.9.0\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
      </Reference>
@@ -380,6 +377,9 @@
      </Reference>
      <Reference Include="unityplastic">
      <HintPath>C:\Users\patri\Documents\UnityVR\Project Flow\Library\PackageCache\com.unity.collab-proxy@2.0.7\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
+     </Reference>
+     <Reference Include="HurricaneVR.Update">
+     <HintPath>C:\Users\patri\Documents\UnityVR\Project Flow\Assets\Packages\HurricaneVR\Framework\Editor\Libs\HurricaneVR.Update.dll</HintPath>
      </Reference>
      <Reference Include="nunit.framework">
      <HintPath>C:\Users\patri\Documents\UnityVR\Project Flow\Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>
