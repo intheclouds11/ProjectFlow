@@ -74,3 +74,5 @@ crashlytics-build.properties
 # Custom
 Assets/HurricaneVR/Framework/Integrations/
 Assets/TextMesh Pro/
+Assets/Gemserk.Favorites.asset
+Assets/Gemserk.SelectionHistory.asset

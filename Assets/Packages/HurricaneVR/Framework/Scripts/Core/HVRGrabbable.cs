@@ -12,6 +12,7 @@ using HurricaneVR.Framework.Core.Stabbing;
 using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
 using HurricaneVR.Framework.Shared.Utilities;
+using HurricaneVR.Framework.Weapons.Guns;
 using UnityEngine;
 using UnityEngine.Serialization;
 

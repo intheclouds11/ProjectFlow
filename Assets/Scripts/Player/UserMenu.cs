@@ -63,14 +63,14 @@ namespace intheclouds
             transform.position = camTrans.position + camTrans.forward * 1.2f;
             LocalUserObjects.instance.PlayerInputs.UpdateInputs = false;
 
-            HVRManager.Instance.ToggleHandGrabbers(false);
+            HVRManager.Instance.HandleGamePaused(true);
             canvasGO.SetActive(true);
         }
 
         private void HideMenu()
         {
             LocalUserObjects.instance.PlayerInputs.UpdateInputs = true;
-            HVRManager.Instance.ToggleHandGrabbers(true);
+            HVRManager.Instance.HandleGamePaused(false);
             canvasGO.SetActive(false);
         }
 
@@ -150,6 +150,7 @@ namespace intheclouds
 
         public void Button_ResetScene()
         {
+            HideMenu();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 

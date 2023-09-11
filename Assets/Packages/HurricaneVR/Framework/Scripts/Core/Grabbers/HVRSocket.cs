@@ -43,6 +43,8 @@ namespace HurricaneVR.Framework.Core.Grabbers
         [Tooltip("If true will snatch from a hand on hover.")]
         public bool GrabsFromHand;
 
+        public bool handAutoGrabs;
+
         [Tooltip("Actions to apply when the socket is being hovered by a grabbable. Auto populates if empty")]
         public HVRSocketHoverAction[] HoverActions;
 

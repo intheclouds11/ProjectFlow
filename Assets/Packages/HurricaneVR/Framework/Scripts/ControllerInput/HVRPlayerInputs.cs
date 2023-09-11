@@ -1,6 +1,7 @@
 ﻿using System;
 using HurricaneVR.Framework.Shared;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -65,12 +66,8 @@ namespace HurricaneVR.Framework.ControllerInput
 
         public bool IsJumpActivated;
         public bool IsDiscardActivated;
-        public bool isLeftAbilitySelectorActive;
-        public bool isLeftAbilitySelectorActivated;
-        public bool isLeftAbilitySelectorDeactivated;
-        public bool isRightAbilitySelectorActive;
-        public bool isRightAbilitySelectorActivated;
-        public bool isRightAbilitySelectorDeactivated;
+        public HVRButtonState leftWeaponSelectorState;
+        public HVRButtonState rightWeaponSelectorState;
 
         public HVRHandSide TeleportHandSide = HVRHandSide.Right;
         public bool SwapMovementAxis;
@@ -140,6 +137,8 @@ namespace HurricaneVR.Framework.ControllerInput
             
             IsJumpActivated = GetIsJumpActivated();
             IsDiscardActivated = GetIsDiscardActivated();
+            leftWeaponSelectorState = GetLeftWeaponSelectorState();
+            rightWeaponSelectorState = GetRightWeaponSelectorState();
             IsStandActivated = GetStand();
 
             ResetState(ref CrouchState);
@@ -202,6 +201,26 @@ namespace HurricaneVR.Framework.ControllerInput
         protected virtual bool GetIsDiscardActivated()
         {
             return RightController.SecondaryButtonState.JustActivated;
+        }
+        
+        protected virtual HVRButtonState GetLeftWeaponSelectorState()
+        {
+            if (LeftControllerType == HVRControllerType.Knuckles)
+            {
+                return LeftController.IndexTrackpadButtonState;
+            }
+
+            return default;
+        }
+        
+        protected virtual HVRButtonState GetRightWeaponSelectorState()
+        {
+            if (RightControllerType == HVRControllerType.Knuckles)
+            {
+                return RightController.IndexTrackpadButtonState;
+            }
+
+            return default;
         }
 
         protected virtual void GetForceGrabActivated(out bool left, out bool right)

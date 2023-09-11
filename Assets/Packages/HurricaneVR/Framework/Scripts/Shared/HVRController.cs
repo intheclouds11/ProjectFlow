@@ -141,6 +141,7 @@ namespace HurricaneVR.Framework.Shared
             CheckButtonState(HVRButtons.Trigger, ref TriggerButtonState);
             CheckButtonState(HVRButtons.JoystickButton, ref JoystickButtonState);
             CheckButtonState(HVRButtons.TrackPadButton, ref TrackpadButtonState);
+            CheckButtonState(HVRButtons.IndexTrackpad, ref IndexTrackpadButtonState);
             CheckButtonState(HVRButtons.Primary, ref PrimaryButtonState);
             CheckButtonState(HVRButtons.Secondary, ref SecondaryButtonState);
             CheckButtonState(HVRButtons.Menu, ref MenuButtonState);
@@ -182,6 +183,7 @@ namespace HurricaneVR.Framework.Shared
             }
 
             AfterInputUpdate();
+            InputHaptics();
         }
 
         protected virtual void AfterInputUpdate()

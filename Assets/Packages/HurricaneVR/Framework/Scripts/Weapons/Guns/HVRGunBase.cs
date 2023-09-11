@@ -131,6 +131,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         public UnityEvent Fired = new UnityEvent();
         public HVRGunHitEvent Hit = new HVRGunHitEvent();
+        public event Action Discarded;
 
         protected float TimeOfLastShot { get; set; }
 
@@ -180,6 +181,27 @@ namespace HurricaneVR.Framework.Weapons.Guns
         public bool IsFiring { get; protected set; }
 
         protected int RoundsFired { get; set; }
+
+
+        public void Enable(bool enable, bool addedToInventory = false)
+        {
+            Grabbable.StartingSocket.CanInteract = enable;
+            Ammo.gunEnabled = enable;
+            
+            if (!enable)
+            {
+                if (Grabbable.IsHandGrabbed)
+                {
+                    Grabbable.ForceRelease();
+                }
+            }
+            
+            var meshRenderers = GetComponentsInChildren<MeshRenderer>();
+            foreach (var meshRenderer in meshRenderers)
+            {
+                meshRenderer.enabled = enable;
+            }
+        }
 
         protected virtual void Awake()
         {
@@ -257,6 +279,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
                     _objects[i].Bullet = new GameObject("Bullet");
                 }
 
+                DontDestroyOnLoad(_objects[i].Bullet);
                 _objects[i].Bullet.SetActive(false);
                 _objects[i].Bullet.hideFlags = HideFlags.HideInHierarchy;
                 _objects[i].Renderers = _objects[i].Bullet.GetComponentsInChildren<Renderer>();
@@ -328,7 +351,8 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
             if (!HVRManager.Instance.debugMode)
             {
-                Grabbable.StartingSocket.TryGrab(Grabbable, false, true);
+                Discarded?.Invoke();
+                Ammo.OnWeaponDiscarded();
             }
         }
 
@@ -420,6 +444,12 @@ namespace HurricaneVR.Framework.Weapons.Guns
             }
 
             TriggerReleased();
+
+            if (!Grabbable.IsHandGrabbed)
+            {
+                var otherHand = arg0.HandSide == HVRHandSide.Left ? HVRManager.Instance.RightHandGrabber : HVRManager.Instance.LeftHandGrabber;
+                otherHand.EnableHandCollision(Grabbable);
+            }
         }
 
         protected virtual void OnHandGrabbed(HVRHandGrabber hand, HVRGrabbable arg1)
@@ -432,6 +462,13 @@ namespace HurricaneVR.Framework.Weapons.Guns
             if (AmmoGrabbable)
             {
                 hand.DisableHandCollision(AmmoGrabbable);
+            }
+
+            if (Grabbable.PrimaryGrabber == hand)
+            {
+                var offHand = hand.HandSide == HVRHandSide.Left ? HVRManager.Instance.RightHandGrabber : HVRManager.Instance.LeftHandGrabber;
+                offHand.DisableHandCollision(Grabbable);
+                offHand.IgnoreNextCollisionCheck = true;
             }
         }
 
@@ -454,6 +491,13 @@ namespace HurricaneVR.Framework.Weapons.Guns
                 if (RecoilComponent)
                 {
                     RecoilComponent.TwoHanded = true;
+                }
+
+                var hand = grabber as HVRHandGrabber;
+                if (hand)
+                {
+                    hand.DisableHandCollision(Grabbable);
+                    hand.IgnoreNextCollisionCheck = true;
                 }
             }
         }
@@ -894,7 +938,14 @@ namespace HurricaneVR.Framework.Weapons.Guns
         protected virtual void OnFire(Vector3 direction)
         {
             FireBullet(direction);
-            FireHaptics();
+            if (WeaponType == WeaponType.Pistol)
+            {
+                Invoke(nameof(FireHaptics), 0.09f);
+            }
+            else
+            {
+                FireHaptics();
+            }
         }
 
         protected virtual void FireHaptics()
@@ -939,9 +990,9 @@ namespace HurricaneVR.Framework.Weapons.Guns
             if (grabbable.HandGrabbers.Count == 0 || !grabbable.HandGrabbers[0].IsMine || data == null) return;
 
             var originalAmplitude = data.Amplitude;
-            data.Amplitude = Random.Range(data.Amplitude * 0.85f, data.Amplitude * 1.15f);
+            data.Amplitude = Random.Range(data.Amplitude * 0.95f, data.Amplitude * 1.05f);
             var originalFrequency = data.Frequency;
-            data.Frequency = Random.Range(data.Frequency * 0.95f, data.Frequency * 1.05f);
+            data.Frequency = Random.Range(data.Frequency * 0.98f, data.Frequency * 1.02f);
             var controller = grabbable.HandGrabbers[0].Controller;
             controller.Vibrate(data);
             data.Amplitude = originalAmplitude;
@@ -968,7 +1019,11 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         protected virtual void AfterFired()
         {
-
+            if (!Ammo.HasAmmo)
+            {
+                Discarded?.Invoke();
+                Enable(false);
+            }
         }
 
         protected virtual void MuzzleFlash()

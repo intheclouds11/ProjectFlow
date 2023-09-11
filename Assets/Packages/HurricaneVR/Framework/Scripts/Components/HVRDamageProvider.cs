@@ -4,6 +4,7 @@ namespace HurricaneVR.Framework.Components
 {
     public class HVRDamageProvider : MonoBehaviour
     {
+        public WeaponType WeaponType;
         public float Damage = 25f;
         public float Force;
 
@@ -16,4 +17,14 @@ namespace HurricaneVR.Framework.Components
         }
 
     }
+    
+    public enum WeaponType
+    {
+        Sword,
+        Pistol,
+        SMG,
+        Bow,
+        Shotgun,
+        RPG
+    };
 }

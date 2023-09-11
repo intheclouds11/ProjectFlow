@@ -11,7 +11,7 @@ namespace HurricaneVR.Framework.Weapons
         [Tooltip("Max bullets allowed in the magazine")]
         public int MaxCount;
 
-        [Tooltip("Bullet Range")] 
+        [Tooltip("Bullet Range")]
         public float MaxRange = 40f;
 
         [Header("Magazine Cleanup")]
@@ -22,6 +22,7 @@ namespace HurricaneVR.Framework.Weapons
 
         [Header("Debug")]
         public int CurrentCount;
+        public bool gunEnabled;
 
         public bool HasAmmo => CurrentCount > 0;
         public bool IsEmpty => CurrentCount <= 0;
@@ -29,6 +30,27 @@ namespace HurricaneVR.Framework.Weapons
         protected virtual void Awake()
         {
             CurrentCount = StartingCount;
+        }
+
+        public void OnWeaponAdded()
+        {
+            CurrentCount = Mathf.Clamp(CurrentCount + StartingCount, 0, MaxCount);
+        }
+
+        public void OnWeaponDiscarded()
+        {
+            if (CurrentCount > 2 * StartingCount)
+            {
+                CurrentCount -= CurrentCount - 2 * StartingCount;
+            }
+            else if (CurrentCount > StartingCount)
+            {
+                CurrentCount -= CurrentCount - StartingCount;
+            }
+            else
+            {
+                CurrentCount = StartingCount;
+            }
         }
 
         public virtual void AddBullet()
@@ -48,6 +70,7 @@ namespace HurricaneVR.Framework.Weapons
                 AddBullet();
                 return true;
             }
+
             return false;
         }
 

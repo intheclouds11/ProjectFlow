@@ -16,7 +16,7 @@ namespace intheclouds
         // public PlayerMovementAP PlayerMovementAP;
         public HVRCameraRig HVRCameraRig;
         public Camera Camera;
-        // public PlayerHUDController HUDController;
+        // public HUDController HUDController;
         public Transform leftController;
         public HVRHandGrabber leftHandGrabber;
         public GameObject leftHandAbilitySelectorSpawn;

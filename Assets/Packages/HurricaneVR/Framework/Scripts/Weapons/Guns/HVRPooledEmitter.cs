@@ -17,7 +17,8 @@ namespace HurricaneVR.Framework.Weapons.Guns
         public HideFlags HideFlags = HideFlags.HideInHierarchy;
 
         private readonly List<HVRPooledObjectTracker> _objects = new List<HVRPooledObjectTracker>();
-
+        
+        
         protected override void Awake()
         {
             base.Awake();
@@ -28,6 +29,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
                 {
                     _objects.Add(new HVRPooledObjectTracker());
                     _objects[i].Object = Instantiate(Prefab);
+                    DontDestroyOnLoad(_objects[i].Object);
                     _objects[i].Object.SetActive(false);
                     _objects[i].Rigidbody = _objects[i].Object.GetRigidbody();
                     _objects[i].Object.hideFlags = HideFlags;

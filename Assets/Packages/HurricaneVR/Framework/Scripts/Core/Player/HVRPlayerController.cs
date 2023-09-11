@@ -514,6 +514,11 @@ namespace HurricaneVR.Framework.Core.Player
             right.Normalize();
         }
 
+        public void HandlePause(bool paused)
+        {
+            
+        }
+
         public float verticalModifier;
         public bool ignoreMaxFallSpeed;
 

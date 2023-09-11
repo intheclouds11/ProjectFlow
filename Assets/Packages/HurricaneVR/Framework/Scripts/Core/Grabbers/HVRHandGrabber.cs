@@ -995,6 +995,8 @@ namespace HurricaneVR.Framework.Core.Grabbers
             }
         }
 
+        public event Action<HVRGrabbable> HandGrabbedFromSocket;
+
         protected virtual bool CheckSocketGrab()
         {
             if (HoveredSocket && CanGrabFromSocket(HoveredSocket) && GrabActivated(HoveredSocket.GrabControl))
@@ -1018,6 +1020,8 @@ namespace HurricaneVR.Framework.Core.Grabbers
 
                 if (TryGrab(HoveredSocket.GrabbedTarget, true))
                 {
+                    HandGrabbedFromSocket?.Invoke(GrabbedTarget);
+                    
                     _currentGrabControl = HoveredSocket.GrabControl;
 
                     HoveredSocket.OnHandGrabberExited();
@@ -1393,6 +1397,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
             {
                 HoveredSocket = closest;
                 HoveredSocket.OnHandGrabberEntered();
+                OnHoverHaptics();
             }
         }
 

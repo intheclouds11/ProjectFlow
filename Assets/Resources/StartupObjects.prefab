@@ -148,7 +148,7 @@ MonoBehaviour:
   desktopModeInputModule: {fileID: 8775132437648341458}
   vrInputModule: {fileID: 2500591687373088292}
   isDesktopMode: 0
-  debugMode: 0
+  debugMode: 1
   loadPlayerSettings: 1
 --- !u!114 &6402442660686813311
 MonoBehaviour:
@@ -261,6 +261,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82a1b90bd6e7417ca9833e08bd4a1ec3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &937378756957312465 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5548840394887440310, guid: e61d775eea3591047985d43ddee69943, type: 3}
+  m_PrefabInstance: {fileID: 4612616153606042215}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1549225722486914449 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6160002237424750582, guid: e61d775eea3591047985d43ddee69943, type: 3}
+  m_PrefabInstance: {fileID: 4612616153606042215}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df32767e580c4d24a3d3c9ed3026afd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &2390462076198215058 stripped
@@ -386,6 +402,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 2321679300253994648}
     m_Modifications:
     - target: {fileID: 4013254746517429688, guid: a03ed519be01d1440a8ec63d2ac101f7, type: 3}
+      propertyPath: Camera
+      value: 
+      objectReference: {fileID: 937378756957312465}
+    - target: {fileID: 4013254746517429688, guid: a03ed519be01d1440a8ec63d2ac101f7, type: 3}
       propertyPath: LeftHandGrabber
       value: 
       objectReference: {fileID: 6370311558009838111}
@@ -393,6 +413,10 @@ PrefabInstance:
       propertyPath: LeftForceGrabber
       value: 
       objectReference: {fileID: 909639377547641720}
+    - target: {fileID: 4013254746517429688, guid: a03ed519be01d1440a8ec63d2ac101f7, type: 3}
+      propertyPath: PlayerController
+      value: 
+      objectReference: {fileID: 1549225722486914449}
     - target: {fileID: 4013254746517429688, guid: a03ed519be01d1440a8ec63d2ac101f7, type: 3}
       propertyPath: RightHandGrabber
       value: 

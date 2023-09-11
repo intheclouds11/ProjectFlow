@@ -17,7 +17,7 @@ MonoBehaviour:
     Amplitude: 0.5
     Frequency: 50
   Fire:
-    Duration: 0.2
+    Duration: 0.1
     Amplitude: 0.7
     Frequency: 150
   TriggeredReleased:

@@ -78,12 +78,13 @@ namespace HurricaneVR.Framework.Core
                 ScreenFader.Fade(alpha, speed);
         }
         
-        public void ToggleHandGrabbers(bool enable)
+        public void HandleGamePaused(bool paused)
         {
-            LeftHandGrabber.AllowHovering = enable;
-            RightHandGrabber.AllowHovering = enable;
-            LeftForceGrabber.AllowHovering = enable;
-            RightForceGrabber.AllowHovering = enable;
+            PlayerController.CharacterController.enabled = !paused;
+            LeftHandGrabber.AllowHovering = !paused;
+            RightHandGrabber.AllowHovering = !paused;
+            LeftForceGrabber.AllowHovering = !paused;
+            RightForceGrabber.AllowHovering = !paused;
         }
     }
 }
