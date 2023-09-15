@@ -4,7 +4,7 @@ namespace HurricaneVR.Framework.Components
 {
     public abstract class HVRDamageHandlerBase : MonoBehaviour
     {
-        public virtual void TakeDamage(float damage)
+        public virtual void TakeDamage(int damage)
         {
         }
 

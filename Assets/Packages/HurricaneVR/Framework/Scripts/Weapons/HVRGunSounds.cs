@@ -79,7 +79,7 @@ namespace HurricaneVR.Framework.Weapons
             if (!clip)
                 return;
 
-            if(SFXPlayer.Instance) SFXPlayer.Instance.PlaySFX(clip, transform.position, 20);
+            if(SFXPlayer.Instance) SFXPlayer.Instance.PlaySFX(clip, transform.position, 200);
         }
 
         private void AddVariation(AudioClip clip, List<AudioClip> variations)

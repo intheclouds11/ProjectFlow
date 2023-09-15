@@ -17,10 +17,11 @@ namespace HurricaneVR.Framework.Core
         public HVRForceGrabber RightForceGrabber;
         public Transform Camera;
         public HVRScreenFade ScreenFader { get; private set; }
-        
+
         [Header("Debug")]
         public bool isDesktopMode;
         public bool debugMode;
+        public bool paused;
 
         private void Awake()
         {
@@ -74,12 +75,13 @@ namespace HurricaneVR.Framework.Core
 
         public void ScreenFade(float alpha, float speed)
         {
-            if(ScreenFader)
+            if (ScreenFader)
                 ScreenFader.Fade(alpha, speed);
         }
-        
+
         public void HandleGamePaused(bool paused)
         {
+            this.paused = paused;
             PlayerController.CharacterController.enabled = !paused;
             LeftHandGrabber.AllowHovering = !paused;
             RightHandGrabber.AllowHovering = !paused;

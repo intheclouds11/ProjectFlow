@@ -18,7 +18,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
         {
             base.DiscardAbilityPressed();
             
-            HVRManager.Instance.PlayerController.verticalModifier = verticalModifier;
+            HVRManager.Instance.PlayerController.verticalOverride = verticalModifier;
         }
     }
 }

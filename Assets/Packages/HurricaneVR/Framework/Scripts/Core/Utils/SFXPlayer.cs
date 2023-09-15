@@ -15,6 +15,7 @@ namespace HurricaneVR.Framework.Core.Utils
         
         public AudioClip errorSFX;
         public AudioClip clickSFX;
+        public AudioClip goalReachedSFX;
 
         static SFXPlayer s_Instance;
         public static SFXPlayer Instance => s_Instance;
@@ -147,6 +148,7 @@ namespace HurricaneVR.Framework.Core.Utils
             audioSource.clip = clip;
             audioSource.minDistance = 0.1f;
             audioSource.maxDistance = maxDistance;
+            audioSource.rolloffMode = AudioRolloffMode.Linear;
             audioSource.spatialBlend = spatial ? 1 : 0;
             audioSource.reverbZoneMix = reverb ? 1 : 0;
 
@@ -181,6 +183,7 @@ namespace HurricaneVR.Framework.Core.Utils
             audioSource.transform.position = transformForSFX.position;
             audioSource.clip = clip;
             audioSource.maxDistance = maxDistance;
+            audioSource.rolloffMode = AudioRolloffMode.Linear;
             audioSource.spatialBlend = spatial ? 1 : 0;
 
             audioSource.volume = volume;

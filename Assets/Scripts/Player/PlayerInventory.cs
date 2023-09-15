@@ -5,7 +5,6 @@ using System.Linq;
 using Assets.HurricaneVR.Framework.Shared.Utilities;
 using HurricaneVR.Framework.Components;
 using HurricaneVR.Framework.Core;
-using HurricaneVR.Framework.Core.Grabbers;
 using HurricaneVR.Framework.Shared;
 using HurricaneVR.Framework.Weapons.Guns;
 using UnityEngine;
@@ -16,7 +15,6 @@ namespace intheclouds
     public class PlayerInventory : MonoBehaviour
     {
         public static PlayerInventory instance;
-        public WeaponType heldWeapon;
         public int sword;
         public int pistolAmount;
         public int smgAmount;
@@ -65,7 +63,6 @@ namespace intheclouds
         public void AddWeapon(WeaponType type)
         {
             int newAmount;
-            heldWeapon = type;
 
             if (type == WeaponType.Pistol && pistolAmount <= 2)
             {

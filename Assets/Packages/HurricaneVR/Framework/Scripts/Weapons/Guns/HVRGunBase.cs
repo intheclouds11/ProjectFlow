@@ -133,7 +133,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
         public HVRGunHitEvent Hit = new HVRGunHitEvent();
         public event Action Discarded;
 
-        protected float TimeOfLastShot { get; set; }
+        protected float lastShotTimer { get; set; }
 
         public bool IsBulletChambered { get; set; }
 
@@ -180,6 +180,11 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         public bool IsFiring { get; protected set; }
 
+        public void EnemyFiring(bool firing)
+        {
+            IsFiring = firing;
+        }
+
         protected int RoundsFired { get; set; }
 
 
@@ -207,8 +212,11 @@ namespace HurricaneVR.Framework.Weapons.Guns
         {
             Grabbable = GetComponent<HVRGrabbable>();
 
-            Grabbable.HandReleased.AddListener(OnHandReleased);
-            Grabbable.HandGrabbed.AddListener(OnHandGrabbed);
+            if (Grabbable)
+            {
+                Grabbable.HandReleased.AddListener(OnHandReleased);
+                Grabbable.HandGrabbed.AddListener(OnHandGrabbed);
+            }
 
             if (StabilizerGrabbable)
             {
@@ -286,14 +294,34 @@ namespace HurricaneVR.Framework.Weapons.Guns
             }
         }
 
+        private void OnDestroy()
+        {
+            foreach (var hvrBulletTracker in _objects)
+            {
+                hvrBulletTracker.Reset();
+                hvrBulletTracker.SetRenderersActive(false);
+            }
+        }
+
 
         protected virtual void Update()
         {
-            CheckTriggerHaptics();
-            CheckTriggerPull();
-            CheckDiscardActivated();
+            if (HVRManager.Instance.paused)
+            {
+                return;
+            }
+            
+            lastShotTimer -= Time.deltaTime;
+            
+            if (Grabbable)
+            {
+                CheckTriggerHaptics();
+                CheckTriggerPull();
+                CheckDiscardActivated();
+                UpdateTriggerAnimation();
+            }
+            
             UpdateTrackedBullets();
-            UpdateTriggerAnimation();
             UpdateShooting();
         }
 
@@ -356,6 +384,9 @@ namespace HurricaneVR.Framework.Weapons.Guns
             }
         }
 
+        // Added this so can hold trigger for pistol or spam trigger for faster firing
+        private bool triggerPulled;
+
         protected virtual void UpdateShooting()
         {
             if (IsFiring)
@@ -366,8 +397,9 @@ namespace HurricaneVR.Framework.Weapons.Guns
                     return;
                 }
 
-                if (Time.time - TimeOfLastShot > Cooldown)
+                if (lastShotTimer <= 0 || triggerPulled)
                 {
+                    triggerPulled = false;
                     Shoot();
                 }
             }
@@ -623,10 +655,10 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
             if (FireType == GunFireType.Single)
             {
-                if (Time.time - TimeOfLastShot < Cooldown)
+                if (lastShotTimer > 0)
                     return;
 
-                TimeOfLastShot = Time.time;
+                lastShotTimer = Cooldown;
 
                 Shoot();
                 return;
@@ -636,6 +668,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
                 return;
 
             IsFiring = true;
+            triggerPulled = true;
             RoundsFired = 0;
         }
 
@@ -772,7 +805,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
         {
             OnShoot();
             AfterFired();
-            TimeOfLastShot = Time.time;
+            lastShotTimer = Cooldown;
             RoundsFired++;
 
             if (FireType == GunFireType.ThreeRoundBurst && RoundsFired == 3)
@@ -1019,7 +1052,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         protected virtual void AfterFired()
         {
-            if (!Ammo.HasAmmo)
+            if (Ammo && !Ammo.HasAmmo)
             {
                 Discarded?.Invoke();
                 Enable(false);
@@ -1192,7 +1225,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         }
 
-        private class HVRBulletTracker
+        public class HVRBulletTracker
         {
             public GameObject Bullet;
             public float Elapsed;

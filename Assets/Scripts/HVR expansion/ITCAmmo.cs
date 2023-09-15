@@ -5,22 +5,25 @@ using HurricaneVR.Framework.Weapons;
 using TMPro;
 using UnityEngine;
 
-public class ITCAmmo : HVRAmmo
+namespace intheclouds
 {
-    [SerializeField]
-    private TextMeshProUGUI ammoText;
-    
-    private void Update()
+    public class ITCAmmo : HVRAmmo
     {
-        if (ammoText)
+        [SerializeField]
+        private TextMeshProUGUI ammoText;
+    
+        private void Update()
         {
-            if (gunEnabled)
+            if (ammoText)
             {
-                ammoText.text = $"{CurrentCount} / {MaxCount}";
-            }
-            else
-            {
-                ammoText.text = "";
+                if (gunEnabled)
+                {
+                    ammoText.text = $"{CurrentCount} / {MaxCount}";
+                }
+                else
+                {
+                    ammoText.text = "";
+                }
             }
         }
     }

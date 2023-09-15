@@ -173,8 +173,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36afb7cdd1462a84cb54c017be4ef91b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  errorSFX: {fileID: 0}
-  clickSFX: {fileID: 0}
+  errorSFX: {fileID: 8300000, guid: 2b6afb9fa03873648a744ca4bbf9f154, type: 3}
+  clickSFX: {fileID: 8300000, guid: b16e62c58a4e96841a8bc81447224a31, type: 3}
+  goalReachedSFX: {fileID: 8300000, guid: 726a3af401f0ba64b827897f6d327c4b, type: 3}
   SFXReferenceSource: {fileID: 4183768154327135795}
   SFXSourceCount: 100
   SetClipName: 0

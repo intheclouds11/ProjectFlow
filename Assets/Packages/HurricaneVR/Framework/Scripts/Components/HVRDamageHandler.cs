@@ -7,7 +7,8 @@ namespace HurricaneVR.Framework.Components
 {
     public class HVRDamageHandler : HVRDamageHandlerBase
     {
-        public float Life = 100f;
+        public int Life = 100;
+        public int StartingLife { get; private set; }
 
         public bool Damageable = true;
 
@@ -16,15 +17,18 @@ namespace HurricaneVR.Framework.Components
         public HVRDestructible Destructible;
 
         public event Action damaged; 
+        public event Action lifeReachedZero;
 
-        void Start()
+        private void Awake()
         {
+            StartingLife = Life;
             Rigidbody = GetComponent<Rigidbody>();
             if (!Destructible)
                 Destructible = GetComponent<HVRDestructible>();
+            
         }
-
-        public override void TakeDamage(float damage)
+        
+        public override void TakeDamage(int damage)
         {
             if (Damageable)
             {
@@ -37,6 +41,8 @@ namespace HurricaneVR.Framework.Components
                 {
                     Destructible.Destroy();
                 }
+                
+                lifeReachedZero?.Invoke();
             }
             else
             {

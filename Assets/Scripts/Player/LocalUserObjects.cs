@@ -1,3 +1,4 @@
+using HurricaneVR.Framework.Components;
 using HurricaneVR.Framework.ControllerInput;
 using HurricaneVR.Framework.Core.Grabbers;
 using HurricaneVR.Framework.Core.Player;
@@ -8,7 +9,7 @@ namespace intheclouds
     public class LocalUserObjects : MonoBehaviour
     {
         public static LocalUserObjects instance;
-        // public PlayerStats PlayerStats;
+        public HVRDamageHandler playerDamageHandler;
         public HVRPlayerController PlayerController;
         public HVRTeleporter Teleporter;
         public HVRPlayerInputs PlayerInputs;

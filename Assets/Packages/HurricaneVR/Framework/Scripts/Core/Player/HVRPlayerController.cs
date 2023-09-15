@@ -18,6 +18,7 @@ namespace HurricaneVR.Framework.Core.Player
     {
         [Header("Settings")]
         public bool CanJump = false;
+        public float coyoteTime = 1f;
 
         public bool CanSteerWhileJumping = true;
         public bool CanSprint = true;
@@ -173,6 +174,7 @@ namespace HurricaneVR.Framework.Core.Player
         private float yVelocity;
         private Vector3 xzVelocity;
         private Quaternion _preTeleportRotation;
+        private float coyoteTimer;
 
         [SerializeField]
         private float _actualVelocity;
@@ -277,6 +279,16 @@ namespace HurricaneVR.Framework.Core.Player
             // {
             //     Teleporter.Teleport(transform.position, Quaternion.AngleAxis(90f, Vector3.up) * transform.forward);
             // }
+
+            if (IsGrounded)
+            {
+                coyoteTimer = coyoteTime;
+            }
+            else
+            {
+                coyoteTimer -= Time.deltaTime;
+            }
+            
             CheckCameraCorrection();
             CheckSprinting();
             UpdateHeight();
@@ -481,7 +493,15 @@ namespace HurricaneVR.Framework.Core.Player
                 HandleHMDMovement();
             }
 
-            HandleHorizontalMovement();
+            if (stomping)
+            {
+                xzVelocity = Vector3.zero;
+            }
+            else
+            {
+                HandleHorizontalMovement();
+            }
+
             HandleVerticalMovement();
             AdjustHandAcceleration();
         }
@@ -514,13 +534,8 @@ namespace HurricaneVR.Framework.Core.Player
             right.Normalize();
         }
 
-        public void HandlePause(bool paused)
-        {
-            
-        }
-
-        public float verticalModifier;
-        public bool ignoreMaxFallSpeed;
+        public float verticalOverride;
+        public bool stomping;
 
         protected virtual void HandleVerticalMovement()
         {
@@ -528,32 +543,29 @@ namespace HurricaneVR.Framework.Core.Player
 
             if (IsGrounded)
             {
-                if (ignoreMaxFallSpeed)
+                if (stomping)
                 {
-                    ignoreMaxFallSpeed = false;
+                    stomping = false;
                 }
                 
-                if (Inputs.IsJumpActivated && CanJump && MovementEnabled)
-                {
-                    yVelocity = JumpVelocity;
-                }
-                else
-                {
-                    yVelocity += -Gravity * Time.deltaTime;
-                }
-
+                yVelocity += -Gravity * Time.deltaTime;
                 yVelocity = Mathf.Clamp(yVelocity, -Gravity * Time.deltaTime, yVelocity);
             }
-            else if (!ignoreMaxFallSpeed)
+            else if (!stomping)
             {
                 yVelocity += -Gravity * Time.deltaTime;
                 yVelocity = Mathf.Clamp(yVelocity, -MaxFallSpeed, yVelocity);
             }
             
-            if (verticalModifier != 0)
+            if (coyoteTimer > 0 && Inputs.IsJumpActivated && CanJump && MovementEnabled)
             {
-                yVelocity = verticalModifier;
-                verticalModifier = 0;
+                yVelocity = JumpVelocity;
+            }
+            
+            if (verticalOverride != 0)
+            {
+                yVelocity = verticalOverride;
+                verticalOverride = 0;
             }
 
             velocity.y += yVelocity;

@@ -15,6 +15,8 @@ namespace intheclouds
         public float maxSmoothDampDistance = 0.12f;
 
         [SerializeField]
+        private TextMeshProUGUI playerHealthText;
+        [SerializeField]
         private TextMeshProUGUI swordText;
         [SerializeField]
         private TextMeshProUGUI pistolText;
@@ -88,12 +90,16 @@ namespace intheclouds
             rpgText.text = "RPG - ";
         }
 
-        // public void NewInfoPopup(string infoText, Color color)
-        // {
-        //     var infoPopup = Instantiate(infoPopupPrefab, infoPopupParent.transform, false).GetComponent<ITCPopup>();
-        //     infoPopup.TextMeshProUGUI.text = infoText;
-        //     infoPopup.TextMeshProUGUI.color = color;
-        // }
+        public void ResetHealthUI()
+        {
+            playerHealthText.text = "Health: 30/30";
+        }
+
+        public void UpdateHealthUI(int remainingHealth)
+        {
+            playerHealthText.text = $"Health: {remainingHealth}/30 ";
+        }
+        
 
         public void ToggleLeanWarning(bool setActive)
         {

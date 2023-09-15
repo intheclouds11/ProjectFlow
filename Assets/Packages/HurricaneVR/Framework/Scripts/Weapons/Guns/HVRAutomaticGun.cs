@@ -17,8 +17,8 @@ namespace HurricaneVR.Framework.Weapons.Guns
         {
             base.DiscardAbilityPressed();
             
-            HVRManager.Instance.PlayerController.verticalModifier = verticalModifier;
-            HVRManager.Instance.PlayerController.ignoreMaxFallSpeed = true;
+            HVRManager.Instance.PlayerController.verticalOverride = verticalModifier;
+            HVRManager.Instance.PlayerController.stomping = true;
         }
     }
 }

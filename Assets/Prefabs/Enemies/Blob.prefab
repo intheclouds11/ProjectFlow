@@ -50,8 +50,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7b9b32643f1dc4489a0e562f8d2db01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
   damagedSFX: {fileID: 0}
   diedSFX: {fileID: 8300000, guid: 30c36b2d782852c40b76d3c68f061a83, type: 3}
+  weaponDrop: {fileID: 0}
+  projectile: {fileID: 0}
   boost: 10
 --- !u!114 &5376888058126113947
 MonoBehaviour:
@@ -67,7 +70,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Life: 1
   Damageable: 1
-  Destructible: {fileID: 0}
+  Destructible: {fileID: 7797176047191656134}
 --- !u!114 &7797176047191656134
 MonoBehaviour:
   m_ObjectHideFlags: 0
