@@ -15,6 +15,7 @@ namespace HurricaneVR.Framework.Components
         public Rigidbody Rigidbody { get; private set; }
 
         public HVRDestructible Destructible;
+        public GameObject SpawnOnDied;
 
         public event Action damaged; 
         public event Action lifeReachedZero;
@@ -40,6 +41,11 @@ namespace HurricaneVR.Framework.Components
                 if (Destructible)
                 {
                     Destructible.Destroy();
+                }
+
+                if (SpawnOnDied)
+                {
+                    Destroy(Instantiate(SpawnOnDied, transform.position, Quaternion.identity), 1.3f);
                 }
                 
                 lifeReachedZero?.Invoke();

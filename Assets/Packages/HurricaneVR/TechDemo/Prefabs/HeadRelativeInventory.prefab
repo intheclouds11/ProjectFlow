@@ -259,7 +259,7 @@ MonoBehaviour:
   SocketFilters: []
   FilterCondition: 0
   DistanceSource: {fileID: 0}
-  PoseTag: 
+  PoseTag: LeftShoulder
   DisableCollision: 1
   SpawnedPrefab:
     m_PersistentCalls:
@@ -396,7 +396,7 @@ MonoBehaviour:
   SocketFilters: []
   FilterCondition: 0
   DistanceSource: {fileID: 0}
-  PoseTag: 
+  PoseTag: RightShoulder
   DisableCollision: 1
   SpawnedPrefab:
     m_PersistentCalls:

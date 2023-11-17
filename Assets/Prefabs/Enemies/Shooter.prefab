@@ -233,7 +233,6 @@ GameObject:
   - component: {fileID: 2797815800414366975}
   - component: {fileID: 5957690510612259762}
   - component: {fileID: 1197833542998555035}
-  - component: {fileID: 5633907900535525829}
   - component: {fileID: 9123434340139049865}
   - component: {fileID: 160425173234998750}
   - component: {fileID: 2622330891770240289}
@@ -242,10 +241,9 @@ GameObject:
   - component: {fileID: 8329121241739636205}
   - component: {fileID: 7639824546819545724}
   - component: {fileID: 7490232009024900357}
-  - component: {fileID: 2140273715766001834}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shooter
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -284,6 +282,9 @@ MonoBehaviour:
   diedSFX: {fileID: 8300000, guid: 8eed073fe9c0e89498e115af5a3a49c7, type: 3}
   weaponDrop: {fileID: 6921983592397501329, guid: c0649fa07ba2ecd41b8b241b7a700fdc, type: 3}
   healthBar: {fileID: 930911355651937295}
+  meshRenderers:
+  - {fileID: 7490232009024900357}
+  - {fileID: 8922178403710140513}
 --- !u!114 &1197833542998555035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,27 +299,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Life: 10
   Damageable: 1
-  Destructible: {fileID: 5633907900535525829}
---- !u!114 &5633907900535525829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6306445341756507494}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66f0a0ab295247a681b1b569944a2bf9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DestroyedVersion: {fileID: 9133413305812024581, guid: e4b04b07925237d45a25a47f4b4c0a6d, type: 3}
-  ExplosionRadius: 0.1
-  ExplosionPower: 1
-  ExplosionUpwardsPower: 1
-  RemoveDebris: 1
-  RemoveDebrisTimerUpper: 10
-  RemoveDebrisTimerLower: 5
-  IgnorePlayerCollision: 1
+  Destructible: {fileID: 0}
+  SpawnOnDied: {fileID: 9133413305812024581, guid: e4b04b07925237d45a25a47f4b4c0a6d, type: 3}
 --- !u!114 &9123434340139049865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,6 +313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba8d902e6ba45b34f961f4fad19e62c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  detectPlayerDistance: 30
 --- !u!114 &160425173234998750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,12 +327,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponType: 0
-  Damage: 10
+  Damage: 1
   Force: 0
   Player: {fileID: 0}
   TriggerPullThreshold: 0.7
   TriggerResetThreshold: 0.6
-  Cooldown: 1
+  Cooldown: 2
   HitLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -376,7 +359,7 @@ MonoBehaviour:
   HitSparks: {fileID: 1509486939602526, guid: 2bdfafb54af034a46815013e96d908d0, type: 3}
   SparksDestroyTime: 1.3
   AmmoEjectDirection: {fileID: 0}
-  BulletOrigin: {fileID: 2797815800414366975}
+  BulletOrigin: {fileID: 108594909187722746}
   BulletEmitter: {fileID: 0}
   CasingEmitter: {fileID: 0}
   CockingHandle: {fileID: 0}
@@ -615,7 +598,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 3146295
+    m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
@@ -638,7 +621,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -694,27 +677,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &2140273715766001834
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6306445341756507494}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 30
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7274168006614353575
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,9 +688,8 @@ GameObject:
   - component: {fileID: 108594909187722746}
   - component: {fileID: 7406581875955479353}
   - component: {fileID: 8922178403710140513}
-  - component: {fileID: 3070840180341312334}
-  m_Layer: 0
-  m_Name: Cube
+  m_Layer: 7
+  m_Name: BulletOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -743,8 +704,8 @@ Transform:
   m_GameObject: {fileID: 7274168006614353575}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0.46}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 0, y: 0, z: 0.507}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2797815800414366975}
@@ -799,27 +760,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3070840180341312334
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7274168006614353575}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7481279408597872457
 GameObject:
   m_ObjectHideFlags: 0
@@ -1036,7 +976,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8957746284636542365}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1045,7 +985,7 @@ RectTransform:
   - {fileID: 7473883864941151618}
   - {fileID: 7574857596263947889}
   m_Father: {fileID: 6345672717672577893}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}

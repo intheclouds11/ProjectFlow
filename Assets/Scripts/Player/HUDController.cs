@@ -92,12 +92,12 @@ namespace intheclouds
 
         public void ResetHealthUI()
         {
-            playerHealthText.text = "Health: 30/30";
+            playerHealthText.text = "Health: 3/3";
         }
 
         public void UpdateHealthUI(int remainingHealth)
         {
-            playerHealthText.text = $"Health: {remainingHealth}/30 ";
+            playerHealthText.text = $"Health: {remainingHealth}/3 ";
         }
         
 

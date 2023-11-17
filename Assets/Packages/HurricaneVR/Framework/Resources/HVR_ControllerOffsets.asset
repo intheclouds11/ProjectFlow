@@ -55,5 +55,8 @@ MonoBehaviour:
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0}
   KnucklesOpenXR:
-    Position: {x: -0.01, y: -0.02, z: -0.05}
-    Rotation: {x: 10, y: 0, z: 0}
+    Position: {x: -0.01, y: -0.035, z: -0.04}
+    Rotation: {x: 20, y: 0, z: 0}
+  PicoOpenXR:
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}

@@ -190,7 +190,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         public void Enable(bool enable, bool addedToInventory = false)
         {
-            Grabbable.StartingSocket.CanInteract = enable;
+            Grabbable.CanBeGrabbed = enable;
             Ammo.gunEnabled = enable;
             
             if (!enable)
@@ -280,28 +280,46 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
                 if (BulletPrefab)
                 {
-                    _objects[i].Bullet = Instantiate(BulletPrefab);
+                    _objects[i].BulletGO = Instantiate(BulletPrefab);
                 }
                 else
                 {
-                    _objects[i].Bullet = new GameObject("Bullet");
+                    _objects[i].BulletGO = new GameObject("Bullet");
                 }
 
-                DontDestroyOnLoad(_objects[i].Bullet);
-                _objects[i].Bullet.SetActive(false);
-                _objects[i].Bullet.hideFlags = HideFlags.HideInHierarchy;
-                _objects[i].Renderers = _objects[i].Bullet.GetComponentsInChildren<Renderer>();
+                DontDestroyOnLoad(_objects[i].BulletGO);
+                _objects[i].BulletGO.SetActive(false);
+                _objects[i].BulletGO.hideFlags = HideFlags.HideInHierarchy;
+                _objects[i].Renderers = _objects[i].BulletGO.GetComponentsInChildren<Renderer>();
+                var hvrBullet = _objects[i].BulletGO.GetComponent<HVRBullet>();
+                _objects[i].hvrBullet = hvrBullet;
+                if (hvrBullet)
+                {
+                    hvrBullet.Gun = this;
+                }
             }
         }
 
-        private void OnDestroy()
+        public void ChangeBulletDirectionAndSpeed(GameObject bulletGO, Vector3 newDirection, float newSpeed)
         {
-            foreach (var hvrBulletTracker in _objects)
+            var trackedBullet = _objects.Find(b => b.BulletGO == bulletGO);
+            if (trackedBullet != null)
             {
-                hvrBulletTracker.Reset();
-                hvrBulletTracker.SetRenderersActive(false);
+                trackedBullet.Direction = newDirection;
+                trackedBullet.Speed = newSpeed;
+                trackedBullet.Elapsed = 0;
+                trackedBullet.DistanceTraveled = 0;
             }
         }
+
+        // private void OnDestroy()
+        // {
+        //     foreach (var hvrBulletTracker in _objects)
+        //     {
+        //         hvrBulletTracker.Reset();
+        //         hvrBulletTracker.SetRenderersActive(false);
+        //     }
+        // }
 
 
         protected virtual void Update()
@@ -707,13 +725,13 @@ namespace HurricaneVR.Framework.Weapons.Guns
             for (int i = 0; i < _objects.Count; i++)
             {
                 var tracker = _objects[i];
-                var bullet = tracker.Bullet;
+                var bullet = tracker.BulletGO;
                 if (bullet.activeSelf)
                 {
                     var speed = _objects[i].Speed;
                     var distance = speed * Time.deltaTime;
 
-                    if (Physics.Raycast(bullet.transform.position, tracker.Direction, out var hit, distance, HitLayerMask, QueryTriggerInteraction.Ignore))
+                    if (Physics.Raycast(bullet.transform.position, tracker.Direction, out var hit, distance, HitLayerMask, QueryTriggerInteraction.Collide))
                     {
                         OnHit(hit, tracker.Direction);
                         bullet.SetActive(false);
@@ -1036,16 +1054,14 @@ namespace HurricaneVR.Framework.Weapons.Guns
         {
             var bullet = GetFreeBullet();
             bullet.Reset();
-            //bullet.Bullet = Instantiate(BulletPrefab);
-            //bullet.Bullet.hideFlags = HideFlags.HideInHierarchy;
             bullet.Range = BulletRange;
             bullet.Direction = direction;
             bullet.TimeToLive = BulletLife;
             bullet.Speed = BulletSpeed;
-            bullet.Bullet.transform.position = BulletOrigin.position;
-            bullet.Bullet.SetActive(true);
-            bullet.Bullet.transform.rotation = Quaternion.FromToRotation(bullet.Bullet.transform.forward, direction) *
-                                               bullet.Bullet.transform.rotation;
+            bullet.BulletGO.transform.position = BulletOrigin.position;
+            bullet.BulletGO.SetActive(true);
+            bullet.BulletGO.transform.rotation = Quaternion.FromToRotation(bullet.BulletGO.transform.forward, direction) *
+                                               bullet.BulletGO.transform.rotation;
             bullet.SetRenderersActive(!SlowMotionBulletOnly || HVRTimeManager.Instance.IsTimeSlowed);
 
         }
@@ -1100,7 +1116,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
             for (var i = 0; i < _objects.Count; i++)
             {
-                if (!_objects[i].Bullet.activeSelf)
+                if (!_objects[i].BulletGO.activeSelf)
                 {
                     return _objects[i];
                 }
@@ -1227,7 +1243,8 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         public class HVRBulletTracker
         {
-            public GameObject Bullet;
+            public GameObject BulletGO;
+            public HVRBullet hvrBullet;
             public float Elapsed;
             public float TimeToLive;
             public float Speed;
@@ -1240,6 +1257,10 @@ namespace HurricaneVR.Framework.Weapons.Guns
             {
                 Elapsed = 0f;
                 DistanceTraveled = 0f;
+                if (hvrBullet)
+                {
+                    hvrBullet.deflected = false;
+                }
             }
 
             public void SetRenderersActive(bool active)

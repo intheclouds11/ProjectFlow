@@ -19,7 +19,8 @@ namespace intheclouds
                 }
 
                 HVRManager.Instance.PlayerController.verticalOverride = boost;
-                _destructible.Destroy();
+                OnDied();
+                Destroy(gameObject);
             }
         }
     }

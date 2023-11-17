@@ -24,12 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 861125009134039381}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 610121078321403317}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8748810939669580264
 MonoBehaviour:
@@ -74,7 +75,6 @@ MonoBehaviour:
     RingStart: 0
     PinkyStart: 0
   Blends: []
-  ReferencePose: {fileID: 0}
   MirrorAxis: 0
 --- !u!1 &2756175996660046109
 GameObject:
@@ -100,12 +100,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2756175996660046109}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 610121078321403317}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1719781208706603529
 MonoBehaviour:
@@ -134,7 +135,7 @@ MonoBehaviour:
     Weight: 1
     Mask: 0
     Type: 0
-    Speed: 16
+    Speed: 50
     AnimationParameter: None
     ButtonParameter: 0
     Button: 0
@@ -144,13 +145,12 @@ MonoBehaviour:
     MiddleType: 0
     RingType: 0
     PinkyType: 0
-    ThumbStart: 0.75
+    ThumbStart: 1
     IndexStart: 1
-    MiddleStart: 0
-    RingStart: 0
-    PinkyStart: 0
+    MiddleStart: 1
+    RingStart: 1
+    PinkyStart: 1
   Blends: []
-  ReferencePose: {fileID: 0}
   MirrorAxis: 0
 --- !u!1 &3225989927217266964
 GameObject:
@@ -175,16 +175,17 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3225989927217266964}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8790403774153913956}
   - {fileID: 939524073572469834}
   - {fileID: 6165857448366880646}
   - {fileID: 6591049471797964637}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3656381536331630415
 GameObject:
@@ -210,12 +211,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3656381536331630415}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 610121078321403317}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3670459489542913952
 MonoBehaviour:
@@ -244,7 +246,7 @@ MonoBehaviour:
     Weight: 1
     Mask: 0
     Type: 0
-    Speed: 16
+    Speed: 50
     AnimationParameter: None
     ButtonParameter: 0
     Button: 0
@@ -254,13 +256,12 @@ MonoBehaviour:
     MiddleType: 0
     RingType: 0
     PinkyType: 0
-    ThumbStart: 0.75
+    ThumbStart: 1
     IndexStart: 1
-    MiddleStart: 0
-    RingStart: 0
-    PinkyStart: 0
+    MiddleStart: 1
+    RingStart: 1
+    PinkyStart: 1
   Blends: []
-  ReferencePose: {fileID: 0}
   MirrorAxis: 0
 --- !u!1 &8371419181757469679
 GameObject:
@@ -286,12 +287,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8371419181757469679}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 610121078321403317}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &508947232377960594
 MonoBehaviour:
@@ -336,5 +338,4 @@ MonoBehaviour:
     RingStart: 0
     PinkyStart: 0
   Blends: []
-  ReferencePose: {fileID: 0}
   MirrorAxis: 0

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1865088902523936277}
   - component: {fileID: 2175201003749349039}
   m_Layer: 0
-  m_Name: Blob (destroyed)
+  m_Name: Destroyed Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

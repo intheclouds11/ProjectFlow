@@ -975,8 +975,10 @@ namespace HurricaneVR.Framework.Core.Grabbers
                 if (HoverTarget.IsSocketed)
                     grabControl = HoverTarget.Socket.GrabControl;
 
-                if (GrabActivated(grabControl) && TryGrab(HoverTarget))
+                // if (GrabActivated(grabControl) && TryGrab(HoverTarget))
+                if (GrabActivated(grabControl) && CanGrab(HoverTarget))
                 {
+                    Grab(HoverTarget, HVRGrabTrigger.Toggle);
                     _currentGrabControl = grabControl;
                     return;
                 }

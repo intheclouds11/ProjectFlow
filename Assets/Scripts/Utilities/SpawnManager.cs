@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Assets.HurricaneVR.Framework.Shared.Utilities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,7 +22,7 @@ namespace intheclouds
 
         private void Start()
         {
-            MovePlayerToStartingSpawnPoint();
+            this.ExecuteAfterFixedUpdate(MovePlayerToStartingSpawnPoint);
         }
 
         public static void MovePlayerToStartingSpawnPoint()
@@ -41,15 +43,7 @@ namespace intheclouds
 
         public static PlayerSpawnPoint GetStartingPlayerSpawnPoint()
         {
-            foreach (var playerSpawnPoint in PlayerSpawnPoints)
-            {
-                if (playerSpawnPoint.startPosition)
-                {
-                    return playerSpawnPoint;
-                }
-            }
-            
-            return null;
+            return PlayerSpawnPoints.FirstOrDefault(playerSpawnPoint => playerSpawnPoint.startPosition);
         }
     }
 }

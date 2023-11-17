@@ -15,8 +15,6 @@ namespace intheclouds
         {
             if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                Debug.Log("Player entered Pickup trigger!");
-
                 SFXPlayer.Instance.PlaySFX(pickupSFX, LocalUserObjects.instance.Camera.transform.position, 1, 1, 10, false, false);
             
                 PlayerInventory.instance.AddWeapon(_weaponType);

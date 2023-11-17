@@ -11,14 +11,13 @@ GameObject:
   - component: {fileID: 2243488150524828626}
   - component: {fileID: 7813651295603273113}
   - component: {fileID: 5376888058126113947}
-  - component: {fileID: 7797176047191656134}
   - component: {fileID: 8774702067744058766}
   - component: {fileID: 1672989685487070392}
   - component: {fileID: 7562907518479299699}
   - component: {fileID: 6988697872037304937}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Blob
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -54,7 +53,9 @@ MonoBehaviour:
   damagedSFX: {fileID: 0}
   diedSFX: {fileID: 8300000, guid: 30c36b2d782852c40b76d3c68f061a83, type: 3}
   weaponDrop: {fileID: 0}
-  projectile: {fileID: 0}
+  healthBar: {fileID: 0}
+  meshRenderers:
+  - {fileID: 6988697872037304937}
   boost: 10
 --- !u!114 &5376888058126113947
 MonoBehaviour:
@@ -70,27 +71,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Life: 1
   Damageable: 1
-  Destructible: {fileID: 7797176047191656134}
---- !u!114 &7797176047191656134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3636926819998699371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66f0a0ab295247a681b1b569944a2bf9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DestroyedVersion: {fileID: 9133413305812024581, guid: e4b04b07925237d45a25a47f4b4c0a6d, type: 3}
-  ExplosionRadius: 0.1
-  ExplosionPower: 1
-  ExplosionUpwardsPower: 1
-  RemoveDebris: 1
-  RemoveDebrisTimerUpper: 10
-  RemoveDebrisTimerLower: 5
-  IgnorePlayerCollision: 1
+  Destructible: {fileID: 0}
+  SpawnOnDied: {fileID: 9133413305812024581, guid: e4b04b07925237d45a25a47f4b4c0a6d, type: 3}
 --- !u!54 &8774702067744058766
 Rigidbody:
   m_ObjectHideFlags: 0

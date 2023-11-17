@@ -19,6 +19,11 @@ namespace HurricaneVR.Editor
         private Vector3 _pos;
         private Quaternion _rot;
 
+        private SocketPose _socketPose;
+        private Vector3 _originalPos;
+        private Quaternion _originalRot;
+        private bool movedToSocket;
+
         private static Dictionary<HVRSocketable, HVRSocket> _cache = new Dictionary<HVRSocketable, HVRSocket>();
 
         private void OnEnable()
@@ -30,6 +35,15 @@ namespace HurricaneVR.Editor
             }
         }
 
+        private void OnDisable()
+        {
+            if (movedToSocket)
+            {
+                component.transform.position = _originalPos;
+                component.transform.rotation = _originalRot;
+            }
+        }
+
         public override void OnInspectorGUI()
         {
             // _expand = EditorGUILayout.Foldout(_expand, "Posing Interface");
@@ -38,8 +52,6 @@ namespace HurricaneVR.Editor
             {
                 var temp = _socket;
                 HVREditorExtensions.ObjectField("Socket", ref _socket);
-               
-
 
                 if (_socket)
                 {
@@ -49,18 +61,6 @@ namespace HurricaneVR.Editor
                     }
                     else
                     {
-                        // if (GUILayout.Button("Snapshot Transform"))
-                        // {
-                        //     _pos = component.transform.position;
-                        //     _rot = component.transform.rotation;
-                        // }
-                        //
-                        // if (GUILayout.Button("Restore Transform"))
-                        // {
-                        //     Undo.RecordObject(component.transform, "Restore Socketable");
-                        //     component.transform.SetPositionAndRotation(_pos, _rot);
-                        // }
-
                         if (_socket.ScaleGrabbable)
                         {
                             if (GUILayout.Button("Apply Socket Scale"))
@@ -75,14 +75,20 @@ namespace HurricaneVR.Editor
                                 component.transform.localScale = Vector3.one;
                             }
                         }
-
-                       
-
-                        if (GUILayout.Button("Move to Socket"))
+                        
+                        if (GUILayout.Button("Move to Socket (Centered)"))
                         {
-                            Undo.RecordObject(component.transform, "Move to Socket");
+                            Undo.RecordObject(component.transform, "Move to Socket (Centered)");
+                            _originalPos = component.transform.position;
+                            _originalRot = component.transform.rotation;
                             component.transform.position = _socket.transform.position;
                             component.transform.rotation = _socket.transform.rotation;
+                            movedToSocket = true;
+                        }
+                        
+                        if (GUILayout.Button("Move to Socket (Posed)"))
+                        {
+                            Debug.LogError("Implement");
                         }
 
                         if (GUILayout.Button("Save Pose"))
@@ -101,6 +107,11 @@ namespace HurricaneVR.Editor
                             pose.FindPropertyRelative("SocketTag").stringValue = _socket.PoseTag;
 
                             serializedObject.ApplyModifiedProperties();
+                        }
+
+                        if (GUILayout.Button("Restore Position and Rotation"))
+                        {
+                            Debug.LogError("Implement");
                         }
                     }
                 }

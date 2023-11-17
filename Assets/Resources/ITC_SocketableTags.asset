@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ITC_SocketableTags
   m_EditorClassIdentifier: 
   _socketables:
+  - Sword
   - Pistol
   - SMG
-  - Sword
-  - Rifle
+  - Bow
   - Shotgun
   - RPG
   - 
