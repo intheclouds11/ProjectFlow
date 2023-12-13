@@ -19,13 +19,13 @@ namespace intheclouds
         [Header("Debug")]
         public bool isDesktopMode;
         [Tooltip("Debug mode enables kbm in VR, endAnyTurn, and spirit wander any time")]
-        public bool debugMode;
         public bool loadPlayerSettings = true;
         // public bool kbmAllowedInVR;
         // public bool endAnyTurn;
         // public bool spiritWanderAnyTime;
         public const string SmoothRotationSettingKey = "SaveSmoothRotationSetting";
         public const string DebugSettingKey = "SaveDebugSetting";
+        public const string EnemyAIActiveSettingKey = "SaveEnemyAIActiveSetting";
 
 
         private void Awake()
@@ -56,23 +56,12 @@ namespace intheclouds
 
             HVRManager.Instance.isDesktopMode = isDesktopMode;
         }
-
-        private void Update()
-        {
-            HVRManager.Instance.debugMode = debugMode;
-        }
-
-        public static void SaveUserTurnSetting(int rotationEnumIndex)
-        {
-            // For reference. rotation == 0 ? smooth : snap
-            PlayerPrefs.SetInt(SmoothRotationSettingKey, rotationEnumIndex);
-            PlayerPrefs.Save();
-        }
         
-        public static void SaveDebugSetting(int debug)
+        public static void SaveIntSetting(string keyName, bool boo)
         {
-            // For reference. debug == 1 ? true : false
-            PlayerPrefs.SetInt(DebugSettingKey, debug);
+            // For reference. value == 1 ? true : false
+            var value = boo ? 1 : 0;
+            PlayerPrefs.SetInt(keyName, value);
             PlayerPrefs.Save();
         }
 
@@ -84,7 +73,11 @@ namespace intheclouds
             }
             if (PlayerPrefs.HasKey(DebugSettingKey))
             {
-                debugMode = PlayerPrefs.GetInt(DebugSettingKey) == 1;
+                HVRManager.Instance.debugMode = PlayerPrefs.GetInt(DebugSettingKey) == 1;
+            }
+            if (PlayerPrefs.HasKey(EnemyAIActiveSettingKey))
+            {
+                EnemyAI.enemyAIActive = PlayerPrefs.GetInt(EnemyAIActiveSettingKey) == 1;
             }
         }
 

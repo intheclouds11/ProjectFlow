@@ -11,6 +11,7 @@ namespace intheclouds
         private Enemy _enemy;
         private bool _playerDetected;
         private HVRGunBase _gunBase;
+        public static bool enemyAIActive = true;
 
 
         private void Awake()
@@ -32,6 +33,8 @@ namespace intheclouds
 
         private void Update()
         {
+            if (!enemyAIActive) return;
+            
             var distToPlayer = Vector3.Distance(transform.position, LocalUserObjects.instance.PlayerController.transform.position);
             _playerDetected = distToPlayer <= detectPlayerDistance;
 

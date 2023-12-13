@@ -22,6 +22,7 @@ namespace HurricaneVR.Framework.Core
         public bool isDesktopMode;
         public bool debugMode;
         public bool paused;
+        private Vector3 velocityBeforePause;
 
         private void Awake()
         {
@@ -79,14 +80,25 @@ namespace HurricaneVR.Framework.Core
                 ScreenFader.Fade(alpha, speed);
         }
 
-        public void HandleGamePaused(bool paused)
+        public void HandleGamePaused(bool pause)
         {
-            this.paused = paused;
-            PlayerController.CharacterController.enabled = !paused;
-            LeftHandGrabber.AllowHovering = !paused;
-            RightHandGrabber.AllowHovering = !paused;
-            LeftForceGrabber.AllowHovering = !paused;
-            RightForceGrabber.AllowHovering = !paused;
+            paused = pause;
+            if (paused)
+            {
+                velocityBeforePause = PlayerController.playerRigidBody.velocity;
+                PlayerController.playerRigidBody.velocity = Vector3.zero;
+                PlayerController.playerRigidBody.isKinematic = true;
+
+            }
+            else
+            {
+                PlayerController.playerRigidBody.isKinematic = false;
+                PlayerController.playerRigidBody.velocity = velocityBeforePause;
+            }
+            LeftHandGrabber.AllowHovering = !pause;
+            RightHandGrabber.AllowHovering = !pause;
+            LeftForceGrabber.AllowHovering = !pause;
+            RightForceGrabber.AllowHovering = !pause;
         }
     }
 }

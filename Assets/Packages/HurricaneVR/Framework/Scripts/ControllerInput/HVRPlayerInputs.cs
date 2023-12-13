@@ -198,6 +198,30 @@ namespace HurricaneVR.Framework.ControllerInput
             return RightController.PrimaryButtonState.JustActivated;
         }
         
+        public virtual bool IsJetActive(HVRHandSide handSide)
+        {
+            if (handSide == HVRHandSide.Left)
+            {
+                return LeftController.PrimaryButtonState.Active;
+            }
+            else
+            {
+                return RightController.PrimaryButtonState.Active;
+            }
+        }
+
+        public float leftStickDeadzone = 0.15f;
+        
+        public virtual float JetBoostAmount()
+        {
+            return LeftController.JoystickAxis.y > leftStickDeadzone ? LeftController.JoystickAxis.y : 0f;
+        }
+        
+        public virtual float JetBrakeAmount()
+        {
+            return LeftController.JoystickAxis.y < leftStickDeadzone ? -LeftController.JoystickAxis.y : 0f;
+        }
+        
         protected virtual bool GetIsDiscardActivated()
         {
             return RightController.SecondaryButtonState.JustActivated;

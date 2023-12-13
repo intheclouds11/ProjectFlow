@@ -16,6 +16,9 @@ namespace HurricaneVR.Framework.Core.Utils
         public AudioClip errorSFX;
         public AudioClip clickSFX;
         public AudioClip goalReachedSFX;
+        public AudioClip jetHandSFX;
+        public AudioClip jetBoostSFX;
+        public AudioClip jetBrakeSFX;
 
         static SFXPlayer s_Instance;
         public static SFXPlayer Instance => s_Instance;

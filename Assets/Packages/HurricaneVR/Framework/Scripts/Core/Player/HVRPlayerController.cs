@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using HurricaneVR.Framework.Components;
 using HurricaneVR.Framework.ControllerInput;
 using HurricaneVR.Framework.Core.Grabbers;
+using HurricaneVR.Framework.Core.Utils;
+using HurricaneVR.Framework.Shared;
 using UnityEngine;
 using UnityEngine.Serialization;
 //using UnityEngine.SpatialTracking;
@@ -17,46 +19,51 @@ namespace HurricaneVR.Framework.Core.Player
     public class HVRPlayerController : MonoBehaviour
     {
         [Header("Settings")]
-        public bool CanJump = false;
         public float coyoteTime = 1f;
+        public float jetSpeed = 1;
+        public float jetBoostSpeed = 1;
+        public float jetBrakeSpeed = 1;
+        public float jetBoostCooldown = 3;
+        public float jetBrakeCooldown = 3;
 
-        public bool CanSteerWhileJumping = true;
-        public bool CanSprint = true;
-        public bool CanCrouch = true;
-        public PlayerDirectionMode DirectionStyle = PlayerDirectionMode.Camera;
+        // public bool CanJump = false;
+        // public bool CanSteerWhileJumping = true;
+        // public bool CanSprint = true;
+        // public bool CanCrouch = true;
+        // public PlayerDirectionMode DirectionStyle = PlayerDirectionMode.Camera;
 
         [Tooltip("If true the player will ignore the first HMD movement on detection. " +
                  "If the HMD is not centered the player would move away from it's placed position to where the HMD is.")]
         public bool InitialHMDAdjustment = true;
 
-        public LayerMask GroundedLayerMask;
-        public float GroundedDistance = .02f;
-
-        [Tooltip("Grounded sphere case radius factor multiplied by the capsules radius for ground checking.")]
-        public float GroundedRadiusFactor = .5f;
-
-        [Tooltip("Minimum Player Capsule Height.")]
-        public float MinHeight = .3f;
-
-        [Header("Locomotion")]
-        public bool InstantAcceleration = true;
-
-        [Tooltip("Walking speed in m/s.")]
-        public float Acceleration = 15;
-
-        public float Deacceleration = 15f;
-        public float MoveSpeed = 1.5f;
-        public float SprintAcceleration = 20f;
-
-        [Tooltip("Sprinting speed in m/s.")]
-        public float RunSpeed = 3.5f;
-
-        public float Gravity = 9.81f;
-        public float MaxFallSpeed = 2f;
-        public float JumpVelocity = 5f;
-
-        [Tooltip("Double click timeout for sprinting.")]
-        public float DoubleClickThreshold = .25f;
+        // public LayerMask GroundedLayerMask;
+        // public float GroundedDistance = .02f;
+        //
+        // [Tooltip("Grounded sphere case radius factor multiplied by the capsules radius for ground checking.")]
+        // public float GroundedRadiusFactor = .5f;
+        //
+        // [Tooltip("Minimum Player Capsule Height.")]
+        // public float MinHeight = .3f;
+        //
+        // [Header("Locomotion")]
+        // public bool InstantAcceleration = true;
+        //
+        // [Tooltip("Walking speed in m/s.")]
+        // public float Acceleration = 15;
+        //
+        // public float Deacceleration = 15f;
+        // public float MoveSpeed = 1.5f;
+        // public float SprintAcceleration = 20f;
+        //
+        // [Tooltip("Sprinting speed in m/s.")]
+        // public float RunSpeed = 3.5f;
+        //
+        // public float Gravity = 9.81f;
+        // public float MaxFallSpeed = 2f;
+        // public float JumpVelocity = 5f;
+        //
+        // [Tooltip("Double click timeout for sprinting.")]
+        // public float DoubleClickThreshold = .25f;
 
 
         [Header("Turning")]
@@ -72,15 +79,15 @@ namespace HurricaneVR.Framework.Core.Player
         [Tooltip("If true you can turn the player while aiming the teleporter, false by default")]
         public bool RotateWhileTeleportAiming;
 
-        [Header("Crouching")]
-        [Tooltip("Player height must be above this to toggle crouch.")]
-        public float CrouchMinHeight = 1.2f;
-
-        [Tooltip("Player height after toggling a crouch via controller.")]
-        public float CrouchHeight = 0.7f;
-
-        [Tooltip("Speed at which toggle crouch moves the player up and down.")]
-        public float CrouchSpeed = 1.5f;
+        // [Header("Crouching")]
+        // [Tooltip("Player height must be above this to toggle crouch.")]
+        // public float CrouchMinHeight = 1.2f;
+        //
+        // [Tooltip("Player height after toggling a crouch via controller.")]
+        // public float CrouchHeight = 0.7f;
+        //
+        // [Tooltip("Speed at which toggle crouch moves the player up and down.")]
+        // public float CrouchSpeed = 1.5f;
 
         [Header("Transforms")]
         public Transform Camera;
@@ -92,13 +99,16 @@ namespace HurricaneVR.Framework.Core.Player
         public Transform RightControllerTransform;
 
         [Header("Components")]
+        public Rigidbody playerRigidBody;
         public HVRCameraRig CameraRig;
-
         public HVRHandGrabber LeftHand;
         public HVRHandGrabber RightHand;
         public HVRJointHand LeftJointHand;
         public HVRJointHand RightJointHand;
         public HVRScreenFade ScreenFader;
+        public AudioSource leftJetAudio;
+        public AudioSource rightJetAudio;
+        public AudioSource boostAndBrakeAudio;
 
         [Header("Head Collision")]
         public HVRHeadCollision HeadCollision;
@@ -124,7 +134,6 @@ namespace HurricaneVR.Framework.Core.Player
         public float MouseSensitivityX = 1f;
 
 
-        public Rigidbody RigidBody { get; private set; }
         public CharacterController CharacterController { get; private set; }
         public HVRTeleporter Teleporter { get; private set; }
 
@@ -133,7 +142,7 @@ namespace HurricaneVR.Framework.Core.Player
             get { return CameraRig.AdjustedCameraHeight; }
         }
 
-        public bool IsCrouching => CameraHeight < CrouchMinHeight;
+        // public bool IsCrouching => CameraHeight < CrouchMinHeight;
 
         public bool IsClimbing => LeftHand && LeftHand.IsClimbing || RightHand && RightHand.IsClimbing;
 
@@ -175,13 +184,15 @@ namespace HurricaneVR.Framework.Core.Player
         private Vector3 xzVelocity;
         private Quaternion _preTeleportRotation;
         private float coyoteTimer;
+        private float jetBoostCooldownTimer;
+        private float jetBrakeCooldownTimer;
 
         [SerializeField]
         private float _actualVelocity;
 
         protected virtual void Awake()
         {
-            RigidBody = GetComponent<Rigidbody>();
+            playerRigidBody = GetComponent<Rigidbody>();
             CharacterController = GetComponent<CharacterController>();
             Teleporter = GetComponent<HVRTeleporter>();
             if (Teleporter)
@@ -288,11 +299,20 @@ namespace HurricaneVR.Framework.Core.Player
             {
                 coyoteTimer -= Time.deltaTime;
             }
+
+            if (jetBoostCooldownTimer > 0)
+            {
+                jetBoostCooldownTimer -= Time.deltaTime;
+            }
+            if (jetBrakeCooldownTimer > 0)
+            {
+                jetBrakeCooldownTimer -= Time.deltaTime;
+            }
             
             CheckCameraCorrection();
-            CheckSprinting();
-            UpdateHeight();
-            CheckCrouching();
+            // CheckSprinting();
+            // UpdateHeight();
+            // CheckCrouching();
             CameraRig.PlayerControllerYOffset = _crouchOffset;
         }
 
@@ -306,22 +326,44 @@ namespace HurricaneVR.Framework.Core.Player
 
         protected virtual void FixedUpdate()
         {
-            if (_waitingForCameraMovement)
-                CheckCameraMovement();
+            // if (_waitingForCameraMovement)
+            //     CheckCameraMovement();
 
-            if (CharacterController.enabled)
+            if (!HVRManager.Instance.paused)
             {
-               
-                HandleMovement(); 
-
-                if (CanRotate())
+                HandleMovement();
+            }
+            else
+            {
+                if (leftJetAudio.isPlaying)
                 {
-                    HandleRotation();
+                    leftJetAudio.Stop();
+                }
+
+                if (rightJetAudio.isPlaying)
+                {
+                    rightJetAudio.Stop();
                 }
             }
 
-            CheckLean();
-            CheckGrounded();
+            if (CanRotate())
+            {
+                HandleRotation();
+            }
+
+            // if (CharacterController.enabled)
+            // {
+            //    
+            //     HandleMovement(); 
+            //
+            //     if (CanRotate())
+            //     {
+            //         HandleRotation();
+            //     }
+            // }
+
+            // CheckLean();
+            // CheckGrounded();
 
 
             _actualVelocity = ((transform.position - PreviousPosition) / Time.deltaTime).magnitude;
@@ -345,84 +387,84 @@ namespace HurricaneVR.Framework.Core.Player
             return true;
         }
 
-        protected virtual void CheckCameraMovement()
-        {
-            if (Vector3.Distance(_cameraStartingPosition, Camera.transform.localPosition) < .05f)
-            {
-                return;
-            }
-
-            var delta = Camera.transform.position - CharacterController.transform.position;
-            delta.y = 0f;
-            CameraRig.transform.position -= delta;
-            _waitingForCameraMovement = false;
-            PreviousPosition = transform.position;
-        }
-
-        protected virtual void CheckGrounded()
-        {
-            var radius = CharacterController.radius * GroundedRadiusFactor;
-            var origin = CharacterController.center - Vector3.up * (.5f * CharacterController.height - radius);
-            IsGrounded = Physics.SphereCast(
-                transform.TransformPoint(origin) + Vector3.up * CharacterController.contactOffset,
-                radius,
-                Vector3.down,
-                out var hit,
-                GroundedDistance + CharacterController.contactOffset,
-                GroundedLayerMask, QueryTriggerInteraction.Ignore);
-
-            GroundNormal = hit.normal;
-        }
-
-        protected virtual void CheckLean()
-        {
-            if (_isCameraCorrecting || !LimitHeadDistance)
-                return;
-
-            var delta = Neck.transform.position - CharacterController.transform.position;
-            delta.y = 0;
-
-            if (delta.sqrMagnitude < .01f || delta.magnitude < MaxLean) return;
-
-            if (FadeFromLean)
-            {
-                StartCoroutine(CorrectCamera());
-                return;
-            }
-
-            var allowedPosition = CharacterController.transform.position + delta.normalized * MaxLean;
-            var difference = allowedPosition - Neck.transform.position;
-            difference.y = 0f;
-            CameraRig.transform.position += difference;
-        }
-
-        protected virtual void UpdateHeight()
-        {
-            CharacterController.height = Mathf.Clamp(CameraRig.AdjustedCameraHeight, MinHeight, CameraRig.AdjustedCameraHeight);
-            CharacterController.center = new Vector3(0, CharacterController.height * .5f + CharacterController.skinWidth, 0f);
-        }
-
-        protected virtual void HandleHMDMovement()
-        {
-            var originalCameraPosition = CameraRig.transform.position;
-            var originalCameraRotation = CameraRig.transform.rotation;
-
-            var delta = Neck.transform.position - CharacterController.transform.position;
-            delta.y = 0f;
-            if (delta.magnitude > 0.0f && CharacterController.enabled)
-            {
-                delta = Vector3.ProjectOnPlane(delta, GroundNormal);
-                CharacterController.Move(delta);
-            }
-
-            transform.rotation = Quaternion.Euler(0.0f, Neck.rotation.eulerAngles.y, 0.0f);
-
-            CameraRig.transform.position = originalCameraPosition;
-            var local = CameraRig.transform.localPosition;
-            local.y = 0f;
-            CameraRig.transform.localPosition = local;
-            CameraRig.transform.rotation = originalCameraRotation;
-        }
+        // protected virtual void CheckCameraMovement()
+        // {
+        //     if (Vector3.Distance(_cameraStartingPosition, Camera.transform.localPosition) < .05f)
+        //     {
+        //         return;
+        //     }
+        //
+        //     var delta = Camera.transform.position - CharacterController.transform.position;
+        //     delta.y = 0f;
+        //     CameraRig.transform.position -= delta;
+        //     _waitingForCameraMovement = false;
+        //     PreviousPosition = transform.position;
+        // }
+        //
+        // protected virtual void CheckGrounded()
+        // {
+        //     var radius = CharacterController.radius * GroundedRadiusFactor;
+        //     var origin = CharacterController.center - Vector3.up * (.5f * CharacterController.height - radius);
+        //     IsGrounded = Physics.SphereCast(
+        //         transform.TransformPoint(origin) + Vector3.up * CharacterController.contactOffset,
+        //         radius,
+        //         Vector3.down,
+        //         out var hit,
+        //         GroundedDistance + CharacterController.contactOffset,
+        //         GroundedLayerMask, QueryTriggerInteraction.Ignore);
+        //
+        //     GroundNormal = hit.normal;
+        // }
+        //
+        // protected virtual void CheckLean()
+        // {
+        //     if (_isCameraCorrecting || !LimitHeadDistance)
+        //         return;
+        //
+        //     var delta = Neck.transform.position - CharacterController.transform.position;
+        //     delta.y = 0;
+        //
+        //     if (delta.sqrMagnitude < .01f || delta.magnitude < MaxLean) return;
+        //
+        //     if (FadeFromLean)
+        //     {
+        //         StartCoroutine(CorrectCamera());
+        //         return;
+        //     }
+        //
+        //     var allowedPosition = CharacterController.transform.position + delta.normalized * MaxLean;
+        //     var difference = allowedPosition - Neck.transform.position;
+        //     difference.y = 0f;
+        //     CameraRig.transform.position += difference;
+        // }
+        //
+        // protected virtual void UpdateHeight()
+        // {
+        //     CharacterController.height = Mathf.Clamp(CameraRig.AdjustedCameraHeight, MinHeight, CameraRig.AdjustedCameraHeight);
+        //     CharacterController.center = new Vector3(0, CharacterController.height * .5f + CharacterController.skinWidth, 0f);
+        // }
+        //
+        // protected virtual void HandleHMDMovement()
+        // {
+        //     var originalCameraPosition = CameraRig.transform.position;
+        //     var originalCameraRotation = CameraRig.transform.rotation;
+        //
+        //     var delta = Neck.transform.position - CharacterController.transform.position;
+        //     delta.y = 0f;
+        //     if (delta.magnitude > 0.0f && CharacterController.enabled)
+        //     {
+        //         delta = Vector3.ProjectOnPlane(delta, GroundNormal);
+        //         CharacterController.Move(delta);
+        //     }
+        //
+        //     transform.rotation = Quaternion.Euler(0.0f, Neck.rotation.eulerAngles.y, 0.0f);
+        //
+        //     CameraRig.transform.position = originalCameraPosition;
+        //     var local = CameraRig.transform.localPosition;
+        //     local.y = 0f;
+        //     CameraRig.transform.localPosition = local;
+        //     CameraRig.transform.rotation = originalCameraRotation;
+        // }
 
         protected virtual void HandleRotation()
         {
@@ -479,154 +521,187 @@ namespace HurricaneVR.Framework.Core.Player
             transform.rotation = Quaternion.Euler(rotationVector);
         }
 
-
         protected virtual void HandleMovement()
         {
-            if (IsClimbing)
+            bool boostOrBraking = false;
+            
+            // Todo: finish implementing boost and brake. Make boost instant and brake gradual
+            if (Inputs.JetBoostAmount() > 0 && jetBoostCooldownTimer <= 0)
             {
-                HandleClimbing();
-                return;
+                playerRigidBody.velocity += new Vector3(0, 0, Camera.forward.z)  * (10f * jetBoostSpeed);
+                jetBoostCooldownTimer = jetBoostCooldown;
+                boostAndBrakeAudio.PlayOneShot(SFXPlayer.Instance.jetBoostSFX);
+                boostOrBraking = true;
+            }
+            else if (Inputs.JetBrakeAmount() > 0 && jetBrakeCooldownTimer <= 0)
+            {
+                playerRigidBody.velocity -= new Vector3(0, 0, Camera.forward.z)  * (10f * jetBrakeSpeed);
+                jetBrakeCooldownTimer = jetBrakeCooldown;
+                boostAndBrakeAudio.PlayOneShot(SFXPlayer.Instance.jetBrakeSFX);
+                boostOrBraking = true;
             }
 
-            if (!_waitingForCameraMovement)
+            if (boostOrBraking)
             {
-                HandleHMDMovement();
-            }
-
-            if (stomping)
-            {
-                xzVelocity = Vector3.zero;
+                leftJetAudio.Stop();
+                rightJetAudio.Stop();
             }
             else
             {
-                HandleHorizontalMovement();
+                if (Inputs.IsJetActive(HVRHandSide.Left))
+                {
+                    playerRigidBody.velocity += LeftControllerTransform.forward * (0.1f * jetSpeed);
+                    if (!leftJetAudio.isPlaying)
+                    {
+                        leftJetAudio.Play();
+                    }
+                }
+                else if (leftJetAudio.isPlaying)
+                {
+                    leftJetAudio.Stop();
+                }
+
+                if (Inputs.IsJetActive(HVRHandSide.Right))
+                {
+                    playerRigidBody.velocity += RightControllerTransform.forward * (0.1f * jetSpeed);
+                    if (!rightJetAudio.isPlaying)
+                    {
+                        rightJetAudio.Play();
+                    }
+                }
+                else if (rightJetAudio.isPlaying)
+                {
+                    rightJetAudio.Stop();
+                }
             }
 
-            HandleVerticalMovement();
-            AdjustHandAcceleration();
+
+            // AdjustHandAcceleration();
         }
 
-        protected virtual void GetMovementDirection(out Vector3 forwards, out Vector3 right)
-        {
-            var t = transform;
+        // protected virtual void GetMovementDirection(out Vector3 forwards, out Vector3 right)
+        // {
+        //     var t = transform;
+        //
+        //     switch (DirectionStyle)
+        //     {
+        //         case PlayerDirectionMode.Camera:
+        //             if (Camera)
+        //                 t = Camera;
+        //             break;
+        //         case PlayerDirectionMode.LeftController:
+        //             if (LeftControllerTransform)
+        //                 t = LeftControllerTransform;
+        //             break;
+        //         case PlayerDirectionMode.RightController:
+        //             if (RightControllerTransform)
+        //                 t = RightControllerTransform;
+        //             break;
+        //     }
+        //
+        //     forwards = t.forward;
+        //     right = t.right;
+        //     forwards.y = 0;
+        //     forwards.Normalize();
+        //     right.y = 0;
+        //     right.Normalize();
+        // }
 
-            switch (DirectionStyle)
-            {
-                case PlayerDirectionMode.Camera:
-                    if (Camera)
-                        t = Camera;
-                    break;
-                case PlayerDirectionMode.LeftController:
-                    if (LeftControllerTransform)
-                        t = LeftControllerTransform;
-                    break;
-                case PlayerDirectionMode.RightController:
-                    if (RightControllerTransform)
-                        t = RightControllerTransform;
-                    break;
-            }
-
-            forwards = t.forward;
-            right = t.right;
-            forwards.y = 0;
-            forwards.Normalize();
-            right.y = 0;
-            right.Normalize();
-        }
-
+        [HideInInspector]
         public float verticalOverride;
+        [HideInInspector]
         public bool stomping;
 
-        protected virtual void HandleVerticalMovement()
-        {
-            Vector3 velocity = xzVelocity;
-
-            if (IsGrounded)
-            {
-                if (stomping)
-                {
-                    stomping = false;
-                }
-                
-                yVelocity += -Gravity * Time.deltaTime;
-                yVelocity = Mathf.Clamp(yVelocity, -Gravity * Time.deltaTime, yVelocity);
-            }
-            else if (!stomping)
-            {
-                yVelocity += -Gravity * Time.deltaTime;
-                yVelocity = Mathf.Clamp(yVelocity, -MaxFallSpeed, yVelocity);
-            }
-            
-            if (coyoteTimer > 0 && Inputs.IsJumpActivated && CanJump && MovementEnabled)
-            {
-                yVelocity = JumpVelocity;
-            }
-            
-            if (verticalOverride != 0)
-            {
-                yVelocity = verticalOverride;
-                verticalOverride = 0;
-            }
-
-            velocity.y += yVelocity;
-
-            CharacterController.Move(velocity * Time.deltaTime);
-        }
-
-        protected virtual void HandleHorizontalMovement()
-        {
-            var speed = MoveSpeed;
-            var runSpeed = RunSpeed;
-
-            if (Sprinting)
-                speed = runSpeed;
-
-            var movement = GetMovementAxis();
-
-            if (!MovementEnabled)
-            {
-                movement = Vector2.zero;
-            }
-
-            GetMovementDirection(out var forward, out var right);
-            var direction = (forward * movement.y + right * movement.x);
-
-            if (IsGrounded || CanSteerWhileJumping)
-            {
-                if (IsGrounded)
-                {
-                    direction = Vector3.ProjectOnPlane(direction, GroundNormal);
-                }
-
-                if (InstantAcceleration)
-                {
-                    xzVelocity = speed * direction;
-                }
-                else
-                {
-                    var noMovement = Mathf.Abs(movement.x) < .1f && Mathf.Abs(movement.y) < .1f;
-                    if (noMovement)
-                    {
-                        var dir = xzVelocity.normalized;
-                        var deacceleration = Deacceleration * Time.deltaTime;
-                        if (deacceleration > xzVelocity.magnitude)
-                        {
-                            xzVelocity = Vector3.zero;
-                        }
-                        else
-                        {
-                            xzVelocity -= dir * deacceleration;
-                        }
-                    }
-                    else
-                    {
-                        var acceleration = (Sprinting ? SprintAcceleration : Acceleration) * Time.deltaTime;
-                        xzVelocity += acceleration * direction;
-                        xzVelocity = Vector3.ClampMagnitude(xzVelocity, speed);
-                    }
-                }
-            }
-        }
+        // protected virtual void HandleVerticalMovement()
+        // {
+        //     Vector3 velocity = xzVelocity;
+        //
+        //     if (IsGrounded)
+        //     {
+        //         if (stomping)
+        //         {
+        //             stomping = false;
+        //         }
+        //         
+        //         yVelocity += -Gravity * Time.deltaTime;
+        //         yVelocity = Mathf.Clamp(yVelocity, -Gravity * Time.deltaTime, yVelocity);
+        //     }
+        //     else if (!stomping)
+        //     {
+        //         yVelocity += -Gravity * Time.deltaTime;
+        //         yVelocity = Mathf.Clamp(yVelocity, -MaxFallSpeed, yVelocity);
+        //     }
+        //     
+        //     if (coyoteTimer > 0 && Inputs.IsJumpActivated && CanJump && MovementEnabled)
+        //     {
+        //         yVelocity = JumpVelocity;
+        //     }
+        //     
+        //     if (verticalOverride != 0)
+        //     {
+        //         yVelocity = verticalOverride;
+        //         verticalOverride = 0;
+        //     }
+        //
+        //     velocity.y += yVelocity;
+        //
+        //     CharacterController.Move(velocity * Time.deltaTime);
+        // }
+        //
+        // protected virtual void HandleHorizontalMovement()
+        // {
+        //     var speed = MoveSpeed;
+        //     var runSpeed = RunSpeed;
+        //
+        //     if (Sprinting)
+        //         speed = runSpeed;
+        //
+        //     var movement = GetMovementAxis();
+        //
+        //     if (!MovementEnabled)
+        //     {
+        //         movement = Vector2.zero;
+        //     }
+        //
+        //     GetMovementDirection(out var forward, out var right);
+        //     var direction = (forward * movement.y + right * movement.x);
+        //
+        //     if (IsGrounded || CanSteerWhileJumping)
+        //     {
+        //         if (IsGrounded)
+        //         {
+        //             direction = Vector3.ProjectOnPlane(direction, GroundNormal);
+        //         }
+        //
+        //         if (InstantAcceleration)
+        //         {
+        //             xzVelocity = speed * direction;
+        //         }
+        //         else
+        //         {
+        //             var noMovement = Mathf.Abs(movement.x) < .1f && Mathf.Abs(movement.y) < .1f;
+        //             if (noMovement)
+        //             {
+        //                 var dir = xzVelocity.normalized;
+        //                 var deacceleration = Deacceleration * Time.deltaTime;
+        //                 if (deacceleration > xzVelocity.magnitude)
+        //                 {
+        //                     xzVelocity = Vector3.zero;
+        //                 }
+        //                 else
+        //                 {
+        //                     xzVelocity -= dir * deacceleration;
+        //                 }
+        //             }
+        //             else
+        //             {
+        //                 var acceleration = (Sprinting ? SprintAcceleration : Acceleration) * Time.deltaTime;
+        //                 xzVelocity += acceleration * direction;
+        //                 xzVelocity = Vector3.ClampMagnitude(xzVelocity, speed);
+        //             }
+        //         }
+        //     }
+        // }
 
         /// <summary>
         /// Accounts for the instantaneous acceleration of the player, without this the hands would lag behind
@@ -635,6 +710,7 @@ namespace HurricaneVR.Framework.Core.Player
         {
             var v = (transform.position - PreviousPosition) / Time.deltaTime;
             var acceler = (v - _previousVelocity) / Time.deltaTime;
+            
             _previousVelocity = v;
             
             LeftJointHand.RigidBody.AddForce(acceler * LeftJointHand.RigidBody.mass, ForceMode.Force);
@@ -706,136 +782,136 @@ namespace HurricaneVR.Framework.Core.Player
             return Inputs.TurnAxis;
         }
 
-        protected virtual void CheckSprinting()
-        {
-            if (!CanSprint)
-                return;
-
-            if (Inputs.SprintRequiresDoubleClick)
-            {
-                if (_awaitingSecondClick)
-                {
-                    _timeSinceLastPress += Time.deltaTime;
-                }
-
-                if (!Sprinting && Inputs.IsSprintingActivated)
-                {
-                    if (_timeSinceLastPress < DoubleClickThreshold && _awaitingSecondClick)
-                    {
-                        Sprinting = true;
-                        _awaitingSecondClick = false;
-                    }
-                    else
-                    {
-                        _timeSinceLastPress = 0f;
-                        _awaitingSecondClick = true;
-                    }
-                }
-            }
-            else
-            {
-                if (Sprinting && Inputs.IsSprintingActivated)
-                    Sprinting = false;
-                else if (!Sprinting && Inputs.IsSprintingActivated)
-                    Sprinting = true;
-            }
-
-            if (GetMovementAxis().magnitude < .01f)
-            {
-                Sprinting = false;
-            }
-        }
-
-        protected virtual void CheckCrouching()
-        {
-            if (!CanCrouch)
-                return;
-
-            if (!_crouchInProgress && CameraHeight >= CrouchMinHeight)
-            {
-                if (Inputs.IsCrouchActivated)
-                {
-                    Crouch();
-                }
-                else if (_isCrouchingToggled)
-                {
-                    StopCrouching();
-                }
-            }
-            else if (_isCrouchingToggled && Inputs.IsCrouchActivated)
-            {
-                StopCrouching();
-            }
-
-            if (IsCrouching && _isCrouchingToggled)
-            {
-                if (_cameraBelowCrouchHeight && CameraHeight > CrouchHeight)
-                {
-                    StopCrouching();
-                }
-                else if (CameraHeight < (CrouchHeight - MinHeight) / 2f)
-                {
-                    _cameraBelowCrouchHeight = true;
-                }
-            }
-        }
-
-        protected virtual void Crouch()
-        {
-            _isCrouchingToggled = true;
-            var target = CrouchHeight - CameraHeight;
-            _cameraBelowCrouchHeight = false;
-            if (_crouchRoutine != null)
-                StopCoroutine(_crouchRoutine);
-            _crouchRoutine = StartCoroutine(CrouchRoutine(target, true));
-        }
-
-        protected virtual void StopCrouching()
-        {
-            _isCrouchingToggled = false;
-            _cameraBelowCrouchHeight = false;
-            if (_crouchRoutine != null)
-                StopCoroutine(_crouchRoutine);
-            _crouchRoutine = StartCoroutine(CrouchRoutine(0f, false));
-        }
-
-        private IEnumerator CrouchRoutine(float target, bool crouching)
-        {
-            _crouchInProgress = true;
-
-            var total = 0f;
-
-            float delta;
-            float min;
-            float max;
-            float sign;
-            if (crouching)
-            {
-                delta = _crouchOffset - target;
-                sign = -1;
-                min = target;
-                max = 0f;
-            }
-            else
-            {
-                delta = 0 - _crouchOffset;
-                sign = 1;
-                min = _crouchOffset;
-                max = 0f;
-            }
-
-            while (total < delta)
-            {
-                _crouchOffset += sign * Time.deltaTime * CrouchSpeed;
-                total += Time.deltaTime * CrouchSpeed;
-
-                _crouchOffset = Mathf.Clamp(_crouchOffset, min, max);
-
-                yield return new WaitForEndOfFrame();
-            }
-
-            _crouchInProgress = false;
-        }
+        // protected virtual void CheckSprinting()
+        // {
+        //     if (!CanSprint)
+        //         return;
+        //
+        //     if (Inputs.SprintRequiresDoubleClick)
+        //     {
+        //         if (_awaitingSecondClick)
+        //         {
+        //             _timeSinceLastPress += Time.deltaTime;
+        //         }
+        //
+        //         if (!Sprinting && Inputs.IsSprintingActivated)
+        //         {
+        //             if (_timeSinceLastPress < DoubleClickThreshold && _awaitingSecondClick)
+        //             {
+        //                 Sprinting = true;
+        //                 _awaitingSecondClick = false;
+        //             }
+        //             else
+        //             {
+        //                 _timeSinceLastPress = 0f;
+        //                 _awaitingSecondClick = true;
+        //             }
+        //         }
+        //     }
+        //     else
+        //     {
+        //         if (Sprinting && Inputs.IsSprintingActivated)
+        //             Sprinting = false;
+        //         else if (!Sprinting && Inputs.IsSprintingActivated)
+        //             Sprinting = true;
+        //     }
+        //
+        //     if (GetMovementAxis().magnitude < .01f)
+        //     {
+        //         Sprinting = false;
+        //     }
+        // }
+        //
+        // protected virtual void CheckCrouching()
+        // {
+        //     if (!CanCrouch)
+        //         return;
+        //
+        //     if (!_crouchInProgress && CameraHeight >= CrouchMinHeight)
+        //     {
+        //         if (Inputs.IsCrouchActivated)
+        //         {
+        //             Crouch();
+        //         }
+        //         else if (_isCrouchingToggled)
+        //         {
+        //             StopCrouching();
+        //         }
+        //     }
+        //     else if (_isCrouchingToggled && Inputs.IsCrouchActivated)
+        //     {
+        //         StopCrouching();
+        //     }
+        //
+        //     if (IsCrouching && _isCrouchingToggled)
+        //     {
+        //         if (_cameraBelowCrouchHeight && CameraHeight > CrouchHeight)
+        //         {
+        //             StopCrouching();
+        //         }
+        //         else if (CameraHeight < (CrouchHeight - MinHeight) / 2f)
+        //         {
+        //             _cameraBelowCrouchHeight = true;
+        //         }
+        //     }
+        // }
+        //
+        // protected virtual void Crouch()
+        // {
+        //     _isCrouchingToggled = true;
+        //     var target = CrouchHeight - CameraHeight;
+        //     _cameraBelowCrouchHeight = false;
+        //     if (_crouchRoutine != null)
+        //         StopCoroutine(_crouchRoutine);
+        //     _crouchRoutine = StartCoroutine(CrouchRoutine(target, true));
+        // }
+        //
+        // protected virtual void StopCrouching()
+        // {
+        //     _isCrouchingToggled = false;
+        //     _cameraBelowCrouchHeight = false;
+        //     if (_crouchRoutine != null)
+        //         StopCoroutine(_crouchRoutine);
+        //     _crouchRoutine = StartCoroutine(CrouchRoutine(0f, false));
+        // }
+        //
+        // private IEnumerator CrouchRoutine(float target, bool crouching)
+        // {
+        //     _crouchInProgress = true;
+        //
+        //     var total = 0f;
+        //
+        //     float delta;
+        //     float min;
+        //     float max;
+        //     float sign;
+        //     if (crouching)
+        //     {
+        //         delta = _crouchOffset - target;
+        //         sign = -1;
+        //         min = target;
+        //         max = 0f;
+        //     }
+        //     else
+        //     {
+        //         delta = 0 - _crouchOffset;
+        //         sign = 1;
+        //         min = _crouchOffset;
+        //         max = 0f;
+        //     }
+        //
+        //     while (total < delta)
+        //     {
+        //         _crouchOffset += sign * Time.deltaTime * CrouchSpeed;
+        //         total += Time.deltaTime * CrouchSpeed;
+        //
+        //         _crouchOffset = Mathf.Clamp(_crouchOffset, min, max);
+        //
+        //         yield return new WaitForEndOfFrame();
+        //     }
+        //
+        //     _crouchInProgress = false;
+        // }
 
         public virtual void IgnoreCollision(IEnumerable<Collider> colliders)
         {

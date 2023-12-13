@@ -3,6 +3,7 @@ using HurricaneVR.Framework.Core.Player;
 using HurricaneVR.Framework.Core.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace intheclouds
@@ -15,6 +16,7 @@ namespace intheclouds
         public GameObject[] controllerHints;
         public Toggle SmoothTurnToggle;
         public Toggle DebugModeToggle;
+        public Toggle EnemyAIToggle;
         public AudioClip MenuClip;
         public GameObject MenuIcon;
         public float holdTimeRequired = 1;
@@ -30,7 +32,8 @@ namespace intheclouds
             canvasGO.SetActive(false);
 
             SmoothTurnToggle.SetIsOnWithoutNotify(LocalUserObjects.instance.PlayerController.RotationType == RotationType.Smooth);
-            DebugModeToggle.SetIsOnWithoutNotify(Startup.instance.debugMode);
+            DebugModeToggle.SetIsOnWithoutNotify(HVRManager.Instance.debugMode);
+            EnemyAIToggle.SetIsOnWithoutNotify(EnemyAI.enemyAIActive);
         }
 
         private void Update()
@@ -77,18 +80,24 @@ namespace intheclouds
         public void Toggle_SmoothTurn(bool smooth)
         {
             LocalUserObjects.instance.PlayerController.RotationType = smooth ? RotationType.Smooth : RotationType.Snap;
-            Startup.SaveUserTurnSetting(smooth ? 0 : 1);
+            Startup.SaveIntSetting(Startup.SmoothRotationSettingKey , smooth);
         }
 
-        public void Toggle_DebugMode(bool toggle)
+        public void Toggle_DebugMode(bool debug)
         {
-            if (DebugModeToggle.isOn != toggle) // force update toggle UI in case toggled using keyboard
+            if (DebugModeToggle.isOn != debug) // force update toggle UI in case toggled using keyboard
             {
-                DebugModeToggle.SetIsOnWithoutNotify(toggle);
+                DebugModeToggle.SetIsOnWithoutNotify(debug);
             }
 
-            Startup.instance.debugMode = toggle;
-            Startup.SaveDebugSetting(toggle ? 1 : 0);
+            HVRManager.Instance.debugMode = debug;
+            Startup.SaveIntSetting(Startup.DebugSettingKey , debug);
+        }
+        
+        public void Toggle_EnemyAIActive(bool active)
+        {
+            EnemyAI.enemyAIActive = active;
+            Startup.SaveIntSetting(Startup.EnemyAIActiveSettingKey, active);
         }
 
         // Currently only used when selecting tabs in menu. Can be called if want to show player specific page
